@@ -1,6 +1,8 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
-
+#include "GameInfo.hpp"
+#include <fstream>
+#include <sstream>
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
@@ -92,7 +94,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     }
 
     register_all_packages();
-
+    loadCacheInfomation();
     // create a scene. it's an autorelease object
     auto scene = HelloWorld::createScene();
 
@@ -124,4 +126,36 @@ void AppDelegate::applicationWillEnterForeground() {
     SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
     SimpleAudioEngine::getInstance()->resumeAllEffects();
 #endif
+}
+
+void AppDelegate::loadCacheInfomation()
+{
+    //game info
+    rapidjson::Document& info = GameInfo::gameInfo;
+    std::ifstream inf("res/gameInfo.json");
+    std::stringstream stdss;
+    
+    if (inf.good()){
+        stdss << inf.rdbuf();
+    }
+    std::string strings = stdss.str();
+    rapidjson::StringStream ss(strings.c_str());
+    info.ParseStream(ss);
+    inf.close();
+    
+    //animation
+    rapidjson::Value::Array names = info["animation_names"].GetArray();
+    //std::vector<std::string> names = {"egg_shell", "mini_tyranausor"};
+    
+    auto sfCache = SpriteFrameCache::getInstance();
+    auto aCache =  AnimationCache::getInstance();
+    for (rapidjson::Value::ConstValueIterator itr = names.begin(); itr != names.end(); itr++){
+        std::string name = itr->GetString();
+        std::string sfCachePath = "res/animation/" + name + "/sprite_frame.plist";
+        sfCache->addSpriteFramesWithFile(sfCachePath);
+        
+        std::string aCachePath = "res/animation/" + name + "/animation.plist";
+        aCache->addAnimationsWithFile(aCachePath);
+    }
+    
 }

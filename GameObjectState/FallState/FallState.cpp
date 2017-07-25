@@ -11,17 +11,17 @@
 #include "IdleState.hpp"
 #include "WalkState.hpp"
 BaseState* FallState::commandHandler(GameObject* entity, commandType command){
-    auto velocity = entity->getCurrentVelocity();
+    auto velocity = entity->getPhysicsComponent()->getCurrentVelocity();
     
     switch (command) {
         case goRight:
-            entity->setVelocity(b2Vec2(entity->getWalkSpeed(), velocity.y));
+            entity->getPhysicsComponent()->setVelocity(b2Vec2(entity->getPhysicsComponent()->getMoveSpeed(), velocity.y));
             break;
         case goLeft:
-            entity->setVelocity(b2Vec2(-entity->getWalkSpeed(), velocity.y));
+            entity->getPhysicsComponent()->setVelocity(b2Vec2(-entity->getPhysicsComponent()->getMoveSpeed(), velocity.y));
             break;
         case leftRelease:
-            entity->setVelocity(b2Vec2(0, velocity.y));
+            entity->getPhysicsComponent()->setVelocity(b2Vec2(0, velocity.y));
             break;
             break;
         default:
@@ -31,14 +31,14 @@ BaseState* FallState::commandHandler(GameObject* entity, commandType command){
 }
 
 BaseState* FallState::observing(GameObject* entity){
-    if (ARE_SAME(entity->getCurrentVelocity().x, 0) && ARE_SAME(entity->getCurrentVelocity().y, 0)) return &GameObjectStates::idleState;
+    if (ARE_SAME(entity->getPhysicsComponent()->getCurrentVelocity().x, 0) && ARE_SAME(entity->getPhysicsComponent()->getCurrentVelocity().y, 0)) return &GameObjectStates::idleState;
     
-    if (!(ARE_SAME(entity->getCurrentVelocity().x, 0)) && ARE_SAME(entity->getCurrentVelocity().y, 0)) return &GameObjectStates::walkState;
+    if (!(ARE_SAME(entity->getPhysicsComponent()->getCurrentVelocity().x, 0)) && ARE_SAME(entity->getPhysicsComponent()->getCurrentVelocity().y, 0)) return &GameObjectStates::walkState;
     
-    auto velocity = entity->getCurrentVelocity();
-    if (entity->isMovingRF() == true && ARE_SAME(velocity.x, 0)){
-        if (!entity->isFlippedX()) entity->setVelocity(b2Vec2(entity->getWalkSpeed(), velocity.y));
-        else entity->setVelocity(b2Vec2(-entity->getWalkSpeed(), velocity.y));
+    auto velocity = entity->getPhysicsComponent()->getCurrentVelocity();
+    if (entity->getPhysicsComponent()->isMoving() == true && ARE_SAME(velocity.x, 0)){
+        if (!entity->isFlippedX()) entity->getPhysicsComponent()->setVelocity(b2Vec2(entity->getPhysicsComponent()->getMoveSpeed(), velocity.y));
+        else entity->getPhysicsComponent()->setVelocity(b2Vec2(-entity->getPhysicsComponent()->getMoveSpeed(), velocity.y));
         
     }
     return nullptr;

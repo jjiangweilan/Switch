@@ -36,7 +36,7 @@ BaseState* IdleState::observing(GameObject* entity){
 
 void IdleState::enter(GameObject* entity, commandType type){
     BaseState::enter(entity, type);
-    entity->setVelocity(b2Vec2_zero);
+    entity->getPhysicsComponent()->setVelocity(b2Vec2_zero);
 }
 void IdleState::leave(GameObject* _entity){
     BaseState::leave(_entity);

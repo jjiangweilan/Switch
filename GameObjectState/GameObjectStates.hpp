@@ -1,20 +1,21 @@
 //
-//  CharacterState.hpp
+//  GameObjectState.hpp
 //  mayo
 //
 //  Created by jiehong jiang on 7/6/17.
 //
 //
 
-#ifndef CharacterStates_hpp
-#define CharacterStates_hpp
+#ifndef GameObjectStates_hpp
+#define GameObjectStates_hpp
 
 class IdleState;
 class JumpState;
 class WalkState;
 class FallState;
 class AttackState;
-class CharacterStates {
+
+class GameObjectStates {
 public:
     static IdleState idleState;
     static JumpState jumpState;
@@ -23,4 +24,4 @@ public:
     static AttackState attackState;
 };
 
-#endif /* CharacterState_hpp */
+#endif /* GameObjectState_hpp */
