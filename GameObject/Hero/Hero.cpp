@@ -73,8 +73,8 @@ std::vector<b2FixtureDef> Hero::createDefaultSisFixtureDef(){
 }
 
 void Hero::update(float delta){
-    
-    this->setPosition(Vec2)
+    b2Vec2 b2Pos = getPhysicsComponent()->getBodyPosition();
+    this->setPosition(Vec2(b2Pos.x * PTM_RATIO, b2Pos.y * PTM_RATIO));
 }
 
 bool Hero::init(){

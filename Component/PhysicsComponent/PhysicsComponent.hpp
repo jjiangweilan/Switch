@@ -45,6 +45,12 @@ public:
      */
     bool isMoving(){return isMoving_;}
     
+    /**
+     get body position
+
+     @return position
+     */
+    b2Vec2 getBodyPosition() {return body_->GetPosition();}
     /*    setter   */
     /**
      set the velocity of the body
