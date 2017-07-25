@@ -27,7 +27,7 @@ BaseState* AttackState::observing(GameObject* entity){
 }
 
 void AttackState::enter(GameObject* entity, commandType type){
-    entity->setVelocity(b2Vec2_zero);
+    entity->getPhysicsComponent()->setVelocity(b2Vec2_zero);
     
     entity->stopActionByTag(1);
     char number = {0};

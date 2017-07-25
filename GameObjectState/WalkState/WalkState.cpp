@@ -17,10 +17,10 @@ BaseState* WalkState::commandHandler(GameObject* entity, commandType type){
     }
     switch (type) {
         case goRight:
-            entity->setVelocity(b2Vec2(entity->getWalkSpeed(), 0));
+            entity->getPhysicsComponent()->setVelocity(b2Vec2(entity->getPhysicsComponent()->getMoveSpeed(), 0));
             break;
         case goLeft:
-            entity->setVelocity(b2Vec2(-entity->getWalkSpeed(), 0));
+            entity->getPhysicsComponent()->setVelocity(b2Vec2(-entity->getPhysicsComponent()->getMoveSpeed(), 0));
             break;
         case leftRelease:
             return &GameObjectStates::idleState;
@@ -37,7 +37,7 @@ BaseState* WalkState::commandHandler(GameObject* entity, commandType type){
 }
 
 BaseState* WalkState::observing(GameObject* entity){
-    auto velocity = entity->getCurrentVelocity();
+    auto velocity = entity->getPhysicsComponent()->getCurrentVelocity();
     if (velocity.y < -FLOAT_ACCURACY)return &GameObjectStates::fallState;
     return nullptr;
 }
@@ -46,10 +46,10 @@ void WalkState::enter(GameObject* entity, commandType type){
     BaseState::enter(entity, type);
     switch (type) {
         case goRight:
-            entity->setVelocity(b2Vec2(entity->getWalkSpeed(), 0));
+            entity->getPhysicsComponent()->setVelocity(b2Vec2(entity->getPhysicsComponent()->getMoveSpeed(), 0));
             break;
         case goLeft:
-            entity->setVelocity(b2Vec2(-entity->getWalkSpeed(), 0));
+            entity->getPhysicsComponent()->setVelocity(b2Vec2(-entity->getPhysicsComponent()->getMoveSpeed(), 0));
         default:
             break;
     }
