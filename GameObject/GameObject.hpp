@@ -32,15 +32,16 @@ public:
 
      @param InputComponent Input Component
      */
-    void setInputComponent(InputComponent* ic) {inputComponent_ = ic;};
+    void setInputComponent(InputComponent* ic) {inputComponent_ = ic;}
     
     /**
      set control component
 
      @param ControlComponent control component
      */
-    void setControlComponent(ControlComponent* cc) {controlComponent_ = cc;};
+    void setControlComponent(ControlComponent* cc) {controlComponent_ = cc;}
     
+    void setObjectName(const std::string& name) {objectName_ = name;}
     /* getter */
     /**
      get physics component
@@ -73,7 +74,7 @@ protected:
     BaseState* currentState_;
     std::string objectName_;
     
-    GameObject(const std::string& objectName);
+    GameObject();
     ~GameObject();
 private:
     PhysicsComponent* physicsComponent_;

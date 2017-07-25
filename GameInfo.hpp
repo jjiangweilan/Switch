@@ -10,7 +10,7 @@
 #define GameInfo_hpp
 
 #include "json/document.h"
-#include "json/stringbuffer.h"
+
 class GameInfo {
 public:
     static rapidjson::Document gameInfo;
