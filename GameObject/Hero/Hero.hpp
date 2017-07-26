@@ -18,7 +18,7 @@ class Hero : public GameObject {
      @param HeroType bro or sis
      @return the ptr to the new hero
      */
-    static Hero* create(HeroType, b2Body*);
+    static Hero* create(const std::string&, HeroType, b2Body*);
     
     /**
      create default bro fixture def for world to generate physics body
@@ -46,7 +46,7 @@ private:
     //call sprite's init
     bool init() override;
     
-    Hero(HeroType, b2Body*);
+    Hero(const std::string&, HeroType, b2Body*);
     ~Hero();
 };
 

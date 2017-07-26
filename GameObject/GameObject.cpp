@@ -14,6 +14,6 @@ GameObject::~GameObject(){
     if(controlComponent_)delete controlComponent_;
 }
 
-GameObject::GameObject(){
+GameObject::GameObject(const std::string& name) : objectName_(name){
     currentState_ = &GameObjectStates::idleState;
 }

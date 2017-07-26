@@ -11,9 +11,17 @@
 
 #include "ObjectComponent.hpp"
 
-class ControlComponent : ObjectComponent
+//this class is designed for hero class, since in the game only hero can be controlled
+class ControlComponent : public ObjectComponent
 {
+public:
+    ControlComponent(GameObject* container);
     
+    void onLeft();
+    void onRight();
+    void onJump();
+    void onSummon();
+    void onSwitch();
 };
 
 #endif /* ControlComponent_hpp */

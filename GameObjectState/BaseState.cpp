@@ -13,7 +13,7 @@ BaseState::BaseState(std::string actionType){this->actionType = actionType;}
 void BaseState::enter(GameObject * entity, commandType type){
     entity->stopActionByTag(1);
     
-    std::string animationName = entity->getName() + "_" + actionType;
+    std::string animationName = entity->getObjectName() + "_" + actionType;
     auto animation = AnimationCache::getInstance()->getAnimation(animationName);
     if (animation == nullptr)return;
     animation->setLoops(-1);

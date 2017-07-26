@@ -41,7 +41,6 @@ public:
      */
     void setControlComponent(ControlComponent* cc) {controlComponent_ = cc;}
     
-    void setObjectName(const std::string& name) {objectName_ = name;}
     /* getter */
     /**
      get physics component
@@ -72,16 +71,17 @@ public:
     std::string getObjectName() {return objectName_;}
 protected:
     BaseState* currentState_;
-    std::string objectName_;
     
-    GameObject();
+    GameObject(const std::string& name);
     ~GameObject();
 private:
     PhysicsComponent* physicsComponent_;
     InputComponent* inputComponent_;
     ControlComponent* controlComponent_;
     
+    std::string objectName_;
     
+    friend ControlComponent;
 };
 
 #define FLOAT_ACCURACY 0.00000001
