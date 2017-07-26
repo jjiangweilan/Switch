@@ -25,9 +25,7 @@ BaseState* WalkState::commandHandler(GameObject* entity, commandType type){
         case leftRelease:
             return &GameObjectStates::idleState;
             break;
-        case attack_1:
-        case attack_2:
-        case attack_3:
+        case attack:
             return &GameObjectStates::attackState;
         default:
             break;

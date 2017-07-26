@@ -9,8 +9,8 @@
 #include "Hero.hpp"
 #include "GameInfo.hpp"
 
-Hero* Hero::create(HeroType heroType, b2Body* body){
-    Hero* ptr = new(std::nothrow) Hero(heroType, body);
+Hero* Hero::create(const std::string& name, HeroType heroType, b2Body* body){
+    Hero* ptr = new(std::nothrow) Hero(name, heroType, body);
     if(ptr && ptr->init())
     {
         ptr->autorelease();
@@ -20,7 +20,7 @@ Hero* Hero::create(HeroType heroType, b2Body* body){
     return nullptr;
 }
 
-Hero::Hero(HeroType heroType, b2Body* body) : GameObject(){
+Hero::Hero(const std::string& name, HeroType heroType, b2Body* body) : GameObject(name){
     rapidjson::Document& d = GameInfo::gameInfo;
     
     if (heroType == bro){
@@ -42,7 +42,7 @@ std::vector<b2FixtureDef> Hero::createDefaultBroFixtureDef(){
     
     collisionAreaShape = new b2PolygonShape();
     collisionAreaShape->SetAsBox(broInfo["body_size"][0].GetFloat(), broInfo["body_size"][1].GetFloat());
-    collisionArea.density = 2;
+    collisionArea.density = broInfo["density"].GetFloat();
     collisionArea.shape = collisionAreaShape;
     collisionArea.restitution = 0;
     collisionArea.friction = 0;
@@ -55,13 +55,13 @@ std::vector<b2FixtureDef> Hero::createDefaultBroFixtureDef(){
 
 std::vector<b2FixtureDef> Hero::createDefaultSisFixtureDef(){
     rapidjson::Document& d = GameInfo::gameInfo;
-    rapidjson::Value& broInfo = d["hero_information"]["sis"];
+    rapidjson::Value& sisInfo = d["hero_information"]["sis"];
     std::vector<b2FixtureDef> fixtures;
     b2FixtureDef collisionArea;
     
     collisionAreaShape = new b2PolygonShape();
-    collisionAreaShape->SetAsBox(broInfo["body_size"][0].GetFloat(), broInfo["body_size"][1].GetFloat());
-    collisionArea.density = 2;
+    collisionAreaShape->SetAsBox(sisInfo["body_size"][0].GetFloat(), sisInfo["body_size"][1].GetFloat());
+    collisionArea.density = sisInfo["density"].GetFloat();
     collisionArea.shape = collisionAreaShape;
     collisionArea.restitution = 0;
     collisionArea.friction = 0;
