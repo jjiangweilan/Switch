@@ -17,10 +17,31 @@ class ControlComponent : public ObjectComponent
 public:
     ControlComponent(GameObject* container);
     
+    //    void connectingToControllerUI(ControllerUI);
+    
+    /**
+     should be called when press left
+     */
     void onLeft();
+    
+    /**
+     should be called when press right
+     */
     void onRight();
+    
+    /**
+     should be called when press jump
+     */
     void onJump();
+    
+    /**
+     should be called when press summon
+     */
     void onSummon();
+    
+    /**
+     should be called when press switch
+     */
     void onSwitch();
 };
 
