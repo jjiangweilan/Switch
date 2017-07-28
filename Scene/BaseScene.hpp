@@ -9,20 +9,22 @@
 #ifndef BaseScene_hpp
 #define BaseScene_hpp
 #include "cocos2d.h"
-#include "SceneStaticPhysics.hpp"
-
+#include "ScenePhysics.hpp"
+#include "Box2D/Box2D.h"
+#include "GameInfo.hpp"
 USING_NS_CC;
 
-class BaseScene : Scene {
+class BaseScene : public Scene {
 public:
     
-    //cocos' create function
+    static BaseScene* create(const b2Vec2& gravity);
     
     BaseScene();
     ~BaseScene();
     
 private:
-    
+    bool init(const b2Vec2& gravity);
+    ScenePhysics scenePhysics;
 };
 
 #endif /* BaseScene_hpp */
