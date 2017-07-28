@@ -1,5 +1,5 @@
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "BaseScene.hpp"
 #include "GameInfo.hpp"
 #include <fstream>
 #include <sstream>
@@ -96,7 +96,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
     loadCacheInfomation();
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    rapidjson::Value& gravityInfo = GameInfo::gameInfo["world"]["gravity"];
+    
+    auto scene = BaseScene::create(b2Vec2(gravityInfo[0].GetFloat(), gravityInfo[1].GetFloat()));
     
     // run
     director->runWithScene(scene);
