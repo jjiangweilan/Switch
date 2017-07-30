@@ -14,7 +14,7 @@ typedef std::vector<b2Vec2> b2Points;
 
 class ScenePhysics {
 public:
-    ScenePhysics(b2World* world) : world_(world){};
+    ScenePhysics(b2Vec2 gravity, b2ContactListener* listener);
     ~ScenePhysics();
     /* getter */
     /**
@@ -22,13 +22,16 @@ public:
      
      @return the box2d physics world
      */
-    b2World* getWorld() {return world_;};
+    b2World* const getWorld() {return world_;};
     
     /* setter */
     
     /* support */
-    
+    void step();
 private:
+    const float timeStep_;
+    const int velocityIterations_;
+    const int positionIterations_;
     b2World* world_;
 };
 

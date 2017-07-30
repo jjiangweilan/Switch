@@ -1,4 +1,5 @@
 #include "AppDelegate.h"
+#include "BaseContactListener.hpp"
 #include "BaseScene.hpp"
 #include "GameInfo.hpp"
 #include <fstream>
@@ -97,8 +98,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     loadCacheInfomation();
     // create a scene. it's an autorelease object
     rapidjson::Value& gravityInfo = GameInfo::gameInfo["world"]["gravity"];
-    
-    auto scene = BaseScene::create(b2Vec2(gravityInfo[0].GetFloat(), gravityInfo[1].GetFloat()));
+    auto contactListener = new BaseContactListener();
+    auto scene = BaseScene::create(b2Vec2(gravityInfo[0].GetFloat(), gravityInfo[1].GetFloat()), contactListener);
     
     // run
     director->runWithScene(scene);

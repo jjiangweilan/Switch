@@ -8,12 +8,14 @@
 
 #include "BaseScene.hpp"
 
-BaseScene::BaseScene() : scenePhysics(NULL){};
-BaseScene::~BaseScene(){};
+BaseScene::BaseScene() : scenePhysics_(NULL), gameObjects_(){};
+BaseScene::~BaseScene(){
+    if(scenePhysics_) delete scenePhysics_;
+};
 
-BaseScene* BaseScene::create(const b2Vec2& gravity){
+BaseScene* BaseScene::create(const b2Vec2& gravity, BaseContactListener* listener){
     auto ptr = new BaseScene();
-    if (ptr->init(gravity) && ptr) {
+    if (ptr->init(gravity, listener) && ptr) {
         ptr->autorelease();
         return ptr;
     }
@@ -22,11 +24,17 @@ BaseScene* BaseScene::create(const b2Vec2& gravity){
     return ptr;
 }
 
-bool BaseScene::init(const b2Vec2& gravity){
+bool BaseScene::init(const b2Vec2& gravity, BaseContactListener* listener){
     if (Scene::init()){
-        scenePhysics = ScenePhysics(new b2World(gravity));
+        scenePhysics_ = new ScenePhysics(gravity, listener);
         return true;
     }
     
     return false;
+}
+
+void BaseScene::update(float delta){
+    for (auto object : gameObjects_){
+        object->update();
+    }
 }
