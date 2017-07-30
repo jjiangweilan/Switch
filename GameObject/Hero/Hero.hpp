@@ -12,6 +12,7 @@
 
 enum HeroType {bro, sis};
 class Hero : public GameObject {
+    ~Hero();
     /**
      create a hero
 
@@ -47,7 +48,7 @@ private:
     bool init() override;
     
     Hero(const std::string&, HeroType, b2Body*);
-    ~Hero();
+    
 };
 
 #endif /* Hero_hpp */

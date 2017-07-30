@@ -19,6 +19,7 @@ USING_NS_CC;
 
 class GameObject : public Sprite {
 public:
+    virtual ~GameObject();
     /* setter */
     /**
      set physics component
@@ -69,11 +70,12 @@ public:
      @return name
      */
     std::string getObjectName() {return objectName_;}
+    
+    /* support */
+    void update();
 protected:
     BaseState* currentState_;
-    
     GameObject(const std::string& name);
-    ~GameObject();
 private:
     PhysicsComponent* physicsComponent_;
     InputComponent* inputComponent_;
@@ -82,6 +84,7 @@ private:
     std::string objectName_;
     
     friend ControlComponent;
+    
 };
 
 #define FLOAT_ACCURACY 0.00000001

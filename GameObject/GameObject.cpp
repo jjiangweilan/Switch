@@ -17,3 +17,10 @@ GameObject::~GameObject(){
 GameObject::GameObject(const std::string& name) : objectName_(name){
     currentState_ = &GameObjectStates::idleState;
 }
+
+void GameObject::update(){
+    if(physicsComponent_){
+    auto bodyPos = physicsComponent_->getBodyPosition();
+    setPosition(Vec2(bodyPos.x * PTM_RATIO, bodyPos.y * PTM_RATIO));
+    }
+}
