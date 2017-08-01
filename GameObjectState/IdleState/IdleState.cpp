@@ -19,9 +19,7 @@ BaseState* IdleState::commandHandler(GameObject* entity, commandType type){
         case jump:
             return &GameObjectStates::jumpState;
             break;
-        case attack_1:
-        case attack_2:
-        case attack_3:
+        case attack:
             return &GameObjectStates::attackState;
             break;
         default:

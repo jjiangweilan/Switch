@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "FirstSceneContactListener.hpp"
+#include "FirstScene.hpp"
 #include "GameInfo.hpp"
 #include <fstream>
 #include <sstream>
@@ -20,10 +21,11 @@ using namespace CocosDenshion;
 
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
-static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
-static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
-static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
+//static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
+static cocos2d::Size designResolutionSize = cocos2d::Size(1136, 640);
+static cocos2d::Size smallResolutionSize = cocos2d::Size(1136, 640);
+static cocos2d::Size mediumResolutionSize = cocos2d::Size(1136, 640);
+static cocos2d::Size largeResolutionSize = cocos2d::Size(1136, 640);
 
 AppDelegate::AppDelegate()
 {
@@ -96,7 +98,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
     loadCacheInfomation();
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    rapidjson::Value& gravityInfo = GameInfo::gameInfo["world"]["gravity"];
+    
+    auto tileMap = TMXTiledMap::create("res/TileMap/SceneMap.tmx");
+    auto scene = FirstScene::create(tileMap, b2Vec2(gravityInfo[0].GetFloat(), gravityInfo[1].GetFloat()));
     
     // run
     director->runWithScene(scene);
