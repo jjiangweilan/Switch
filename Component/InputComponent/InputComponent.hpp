@@ -14,6 +14,8 @@
 class InputComponent : public ObjectComponent
 {
 public:
-    InputComponent(GameObject* container) : ObjectComponent(container){};
+    InputComponent(GameObject* container) : ObjectComponent(container){
+        
+    };
 };
 #endif /* InputComponent_hpp */
