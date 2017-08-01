@@ -21,7 +21,7 @@ typedef std::vector<GameObject*> GameObject_v;
 class BaseScene : public Scene {
 public:
     
-    static BaseScene* create(const b2Vec2& gravity, BaseContactListener* listener);
+    static BaseScene* create(TMXTiledMap* map, const b2Vec2& gravity, BaseContactListener* listener);
     
     BaseScene();
     virtual ~BaseScene();
@@ -32,11 +32,26 @@ public:
      @param delta time step
      */
     virtual void update(float delta);
+    
+    /**
+     draw for debug
+
+     @param renderer
+     @param transform
+     @param flags 
+     */
+    void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags){
+        Scene::draw(renderer, transform, flags);
+        
+        scenePhysics_->getWorld()->DrawDebugData();
+        
+    }
 private:
-    bool init(const b2Vec2& gravity, BaseContactListener* listener);
+    bool init(TMXTiledMap* map, const b2Vec2& gravity, BaseContactListener* listener);
     
     ScenePhysics* scenePhysics_;
     GameObject_v gameObjects_;
+    TMXTiledMap* tiledMap;
 };
 
 #endif /* BaseScene_hpp */
