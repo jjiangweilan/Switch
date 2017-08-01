@@ -1,5 +1,5 @@
 #include "AppDelegate.h"
-#include "BaseContactListener.hpp"
+#include "FirstSceneContactListener.hpp"
 #include "FirstScene.hpp"
 #include "GameInfo.hpp"
 #include <fstream>
@@ -99,9 +99,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     loadCacheInfomation();
     // create a scene. it's an autorelease object
     rapidjson::Value& gravityInfo = GameInfo::gameInfo["world"]["gravity"];
-    auto contactListener = new BaseContactListener();
+    
     auto tileMap = TMXTiledMap::create("res/TileMap/SceneMap.tmx");
-    auto scene = FirstScene::create(tileMap, b2Vec2(gravityInfo[0].GetFloat(), gravityInfo[1].GetFloat()), contactListener);
+    auto scene = FirstScene::create(tileMap, b2Vec2(gravityInfo[0].GetFloat(), gravityInfo[1].GetFloat()));
     
     // run
     director->runWithScene(scene);
