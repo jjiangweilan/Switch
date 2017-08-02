@@ -14,8 +14,10 @@
 class InputComponent : public ObjectComponent
 {
 public:
-    InputComponent(GameObject* container) : ObjectComponent(container){
-        
-    };
+    InputComponent(GameObject* container);
+    void setScene(cocos2d::Scene* scene);
+private:
+    cocos2d::Scene* scene_;
+    /* touch event */
 };
 #endif /* InputComponent_hpp */

@@ -6,6 +6,7 @@
 //
 //
 
+#include "Hero.hpp"
 #include "FirstScene.hpp"
 #include "FirstSceneContactListener.hpp"
 #include "GLES-Render.h"
@@ -40,7 +41,7 @@ bool FirstScene::init(TMXTiledMap* map, const b2Vec2& gravity){
     };
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(li, this);
     
-    
+    heroInit();
     return true;
 }
 
@@ -48,4 +49,34 @@ void FirstScene::registerEvent(){
     GameScene::registerEvent("open_door", 4, CC_CALLBACK_0(FirstScene::openDoor, this));
 }
 
+void FirstScene::heroInit(){
+    rapidjson::Document& d = GameInfo::gameInfo;
+    rapidjson::Value& broInfo = d["hero_information"]["bro"];
+    //body
+    b2BodyDef broBodyDef;
+    broBodyDef.fixedRotation = true;
+    broBodyDef.position = b2Vec2(broInfo["first_scene"]["init_pos"][0].GetInt() / PTM_RATIO, broInfo["first_scene"]["init_pos"][1].GetInt() / PTM_RATIO);
+    broBodyDef.type = b2_dynamicBody;
+    //fixture
+    
+    b2FixtureDef collisionArea;
+    b2PolygonShape collisionAreaShape;
+    collisionAreaShape.SetAsBox(broInfo["body_size"][0].GetFloat() / PTM_RATIO, broInfo["body_size"][1].GetFloat() / PTM_RATIO);
+    collisionArea.density = broInfo["density"].GetFloat();
+    collisionArea.shape = &collisionAreaShape;
+    collisionArea.restitution = 0;
+    collisionArea.friction = 0;
+    collisionArea.filter.categoryBits = d["physics_category"]["hero"].GetInt();
+    collisionArea.filter.maskBits = d["physics_category"]["wall"].GetInt();
+    
+    auto body = scenePhysics_->getWorld()->CreateBody(&broBodyDef);
+    body->CreateFixture(&collisionArea);
+    auto bro = Hero::create("egg_shell", HeroType::bro, body);
+    gameObjects_.push_back(bro);
+    this->addChild(bro);
+}
+
+void FirstScene::update(float delta){
+    GameScene::update(delta);
+}
 

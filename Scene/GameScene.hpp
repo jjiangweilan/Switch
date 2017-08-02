@@ -15,6 +15,7 @@
 #include "GameInfo.hpp"
 #include "GameObject.hpp"
 #include "GameEvent.hpp"
+#include "InputComponent.hpp"
 USING_NS_CC;
 typedef std::vector<GameObject*> GameObject_v;
 typedef std::map<std::string, GameEvent*> GameEvent_v;
@@ -28,7 +29,7 @@ public:
 
      @param delta time step
      */
-    virtual void update(float delta);
+    virtual void update(float delta) override;
     
     /**
      draw for debug
@@ -37,7 +38,7 @@ public:
      @param transform
      @param flags 
      */
-    void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags){
+    void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override{
         Scene::draw(renderer, transform, flags);
         
         scenePhysics_->getWorld()->DrawDebugData();
@@ -51,7 +52,7 @@ public:
 protected:
     ScenePhysics* scenePhysics_;
     GameObject_v gameObjects_;
-    
+    InputComponent* inputComponent_;
     bool init(TMXTiledMap* map, const b2Vec2& gravity);
     /**
      add a new event recorder to game event map

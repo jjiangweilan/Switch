@@ -16,6 +16,13 @@ public:
     
     FirstScene(): GameScene() {};
     ~FirstScene(){};
+    
+    /**
+     update function to override
+     
+     @param delta time step
+     */
+    virtual void update(float dt) override;
 private:
     bool init(TMXTiledMap* map, const b2Vec2& gravity);
     
@@ -23,7 +30,7 @@ private:
      designed to separate event makeing up
      */
     void registerEvent();
-    
+    void heroInit();
     /* event script */
     void openDoor(){
         log("open door");

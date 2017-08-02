@@ -20,7 +20,7 @@ GameObject::GameObject(const std::string& name) : objectName_(name){
 
 void GameObject::update(){
     if(physicsComponent_){
-    auto bodyPos = physicsComponent_->getBodyPosition();
-    setPosition(Vec2(bodyPos.x * PTM_RATIO, bodyPos.y * PTM_RATIO));
+        auto bodyPos = physicsComponent_->getBodyPosition();
+        setPosition(Vec2(bodyPos.x * PTM_RATIO, bodyPos.y * PTM_RATIO));
     }
 }
