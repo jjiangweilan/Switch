@@ -27,7 +27,8 @@ Hero::Hero(const std::string& name, HeroType heroType, b2Body* body) : GameObjec
         rapidjson::Value& broInfo = d["hero_information"]["bro"];
         body->SetUserData(this);
         GameObject::setPhysicsComponent(new PhysicsComponent(this, body, broInfo["move_speed"].GetInt(), broInfo["jump_speed"].GetInt()));
-        GameObject::setInputComponent(new InputComponent(this));
+    
+        GameObject::setControlComponent(new ControlComponent(this));
         
         currentState_->enter(this, idle);
     }

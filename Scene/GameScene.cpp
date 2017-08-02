@@ -24,11 +24,18 @@ bool GameScene::init(TMXTiledMap* map, const b2Vec2& gravity){
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         map->setPosition(origin);
         addChild(tiledMap_);
-        
+    
         return true;
     }
     
     return false;
+}
+
+void GameScene::initUI(){
+    Size size = Director::getInstance()->getVisibleSize();
+    uiLayer_ = UILayer::create(size);
+    
+    addChild(uiLayer_);
 }
 
 void GameScene::update(float delta){

@@ -35,6 +35,8 @@ private:
     void openDoor(){
         log("open door");
     }
+    
+    void initUI();
 };
 
 #endif /* FirstScene_hpp */

@@ -13,7 +13,7 @@
 #include "BaseState.hpp"
 #include "GameObjectStates.hpp"
 #include "PhysicsComponent.hpp"
-#include "InputComponent.hpp"
+
 #include "ControlComponent.hpp"
 USING_NS_CC;
 
@@ -29,12 +29,6 @@ public:
      */
     void setPhysicsComponent(PhysicsComponent* pc) {physicsComponent_ = pc;};
     
-    /**
-     set input component
-
-     @param InputComponent Input Component
-     */
-    void setInputComponent(InputComponent* ic) {inputComponent_ = ic;}
     
     /**
      set control component
@@ -50,13 +44,6 @@ public:
      @return current physicsComponent
      */
     PhysicsComponent* getPhysicsComponent(){return physicsComponent_;}
-    
-    /**
-     get input component
-
-     @return current input component
-     */
-    InputComponent* getInputComponent(){return inputComponent_;}
     
     /**
      get control component
@@ -79,7 +66,6 @@ protected:
     
 private:
     PhysicsComponent* physicsComponent_;
-    InputComponent* inputComponent_;
     ControlComponent* controlComponent_;
     
     std::string objectName_;

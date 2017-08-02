@@ -2,8 +2,6 @@
 #include "FirstSceneContactListener.hpp"
 #include "FirstScene.hpp"
 #include "GameInfo.hpp"
-#include <fstream>
-#include <sstream>
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
@@ -137,16 +135,12 @@ void AppDelegate::loadCacheInfomation()
 {
     //game info
     rapidjson::Document& info = GameInfo::gameInfo;
+
+    Data ss = FileUtils::getInstance()->getDataFromFile("res/gameInfo.json");
+    std::string s((char*)ss.getBytes(), ss.getSize());
+    log("%s", s.c_str());
+    info.Parse(s.c_str());
     
-    std::ifstream inf("/Users/jiehongjiang/Desktop/switch/Resources/res/gameInfo.json");
-    std::stringstream stdss;
-    
-    assert(inf.is_open());
-    stdss << inf.rdbuf();
-    
-    std::string string = stdss.str();
-    info.Parse(string.c_str());
-    inf.close();
     
     //animation
     rapidjson::Value::Array names = info["animation_names"].GetArray();
