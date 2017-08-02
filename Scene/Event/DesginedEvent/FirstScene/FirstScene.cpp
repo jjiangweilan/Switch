@@ -42,6 +42,7 @@ bool FirstScene::init(TMXTiledMap* map, const b2Vec2& gravity){
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(li, this);
     
     heroInit();
+    initUI();
     return true;
 }
 
@@ -72,8 +73,20 @@ void FirstScene::heroInit(){
     auto body = scenePhysics_->getWorld()->CreateBody(&broBodyDef);
     body->CreateFixture(&collisionArea);
     auto bro = Hero::create("egg_shell", HeroType::bro, body);
+    bro->setTag(broInfo["tag"].GetInt());
     gameObjects_.push_back(bro);
     this->addChild(bro);
+}
+
+void FirstScene::initUI(){
+    GameScene::initUI();
+    
+    auto controller = uiLayer_->getControllerLayer();
+    auto bro = dynamic_cast<GameObject*>(this->getChildByTag(GameInfo::gameInfo["hero_information"]["bro"]["tag"].GetInt()));
+    auto bro_controlCompoenet = bro->getControlComponent();
+    controller->onRight = CC_CALLBACK_0(ControlComponent::onRight, bro_controlCompoenet);
+    controller->onLeft = CC_CALLBACK_0(ControlComponent::onLeft, bro_controlCompoenet);
+    
 }
 
 void FirstScene::update(float delta){

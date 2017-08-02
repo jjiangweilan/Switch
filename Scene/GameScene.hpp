@@ -15,7 +15,8 @@
 #include "GameInfo.hpp"
 #include "GameObject.hpp"
 #include "GameEvent.hpp"
-#include "InputComponent.hpp"
+
+#include "UILayer.hpp"
 USING_NS_CC;
 typedef std::vector<GameObject*> GameObject_v;
 typedef std::map<std::string, GameEvent*> GameEvent_v;
@@ -52,7 +53,8 @@ public:
 protected:
     ScenePhysics* scenePhysics_;
     GameObject_v gameObjects_;
-    InputComponent* inputComponent_;
+    UILayer* uiLayer_;
+    
     bool init(TMXTiledMap* map, const b2Vec2& gravity);
     /**
      add a new event recorder to game event map
@@ -70,7 +72,7 @@ protected:
      */
     void checkEvent(const std::string&);
     
-    
+    void initUI();
 private:
     TMXTiledMap* tiledMap_;
     GameEvent_v gameEvent_v_;

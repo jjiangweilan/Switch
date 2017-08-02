@@ -10,7 +10,6 @@
 #include "IdleState.hpp"
 GameObject::~GameObject(){
     if(physicsComponent_)delete physicsComponent_;
-    if(inputComponent_)delete inputComponent_;
     if(controlComponent_)delete controlComponent_;
 }
 
