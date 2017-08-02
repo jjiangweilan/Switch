@@ -25,51 +25,16 @@ Hero::Hero(const std::string& name, HeroType heroType, b2Body* body) : GameObjec
     
     if (heroType == bro){
         rapidjson::Value& broInfo = d["hero_information"]["bro"];
+        body->SetUserData(this);
         GameObject::setPhysicsComponent(new PhysicsComponent(this, body, broInfo["move_speed"].GetInt(), broInfo["jump_speed"].GetInt()));
         GameObject::setInputComponent(new InputComponent(this));
+        
+        currentState_->enter(this, idle);
     }
 }
 
 Hero::~Hero(){
     if(collisionAreaShape)delete collisionAreaShape;
-}
-
-std::vector<b2FixtureDef> Hero::createDefaultBroFixtureDef(){
-    rapidjson::Document& d = GameInfo::gameInfo;
-    rapidjson::Value& broInfo = d["hero_information"]["bro"];
-    std::vector<b2FixtureDef> fixtures;
-    b2FixtureDef collisionArea;
-    
-    collisionAreaShape = new b2PolygonShape();
-    collisionAreaShape->SetAsBox(broInfo["body_size"][0].GetFloat(), broInfo["body_size"][1].GetFloat());
-    collisionArea.density = broInfo["density"].GetFloat();
-    collisionArea.shape = collisionAreaShape;
-    collisionArea.restitution = 0;
-    collisionArea.friction = 0;
-    collisionArea.filter.categoryBits = HERO_CATELOGUE;
-    
-    fixtures.push_back(collisionArea);
-    
-    return fixtures;
-}
-
-std::vector<b2FixtureDef> Hero::createDefaultSisFixtureDef(){
-    rapidjson::Document& d = GameInfo::gameInfo;
-    rapidjson::Value& sisInfo = d["hero_information"]["sis"];
-    std::vector<b2FixtureDef> fixtures;
-    b2FixtureDef collisionArea;
-    
-    collisionAreaShape = new b2PolygonShape();
-    collisionAreaShape->SetAsBox(sisInfo["body_size"][0].GetFloat(), sisInfo["body_size"][1].GetFloat());
-    collisionArea.density = sisInfo["density"].GetFloat();
-    collisionArea.shape = collisionAreaShape;
-    collisionArea.restitution = 0;
-    collisionArea.friction = 0;
-    collisionArea.filter.categoryBits = HERO_CATELOGUE;
-    
-    fixtures.push_back(collisionArea);
-    
-    return fixtures;
 }
 
 void Hero::update(float delta){

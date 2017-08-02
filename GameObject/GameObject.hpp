@@ -19,6 +19,7 @@ USING_NS_CC;
 
 class GameObject : public Sprite {
 public:
+    GameObject(const std::string& name);
     virtual ~GameObject();
     /* setter */
     /**
@@ -75,7 +76,7 @@ public:
     void update();
 protected:
     BaseState* currentState_;
-    GameObject(const std::string& name);
+    
 private:
     PhysicsComponent* physicsComponent_;
     InputComponent* inputComponent_;

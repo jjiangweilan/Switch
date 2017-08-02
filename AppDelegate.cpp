@@ -102,7 +102,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
     auto tileMap = TMXTiledMap::create("res/TileMap/SceneMap.tmx");
     auto scene = FirstScene::create(tileMap, b2Vec2(gravityInfo[0].GetFloat(), gravityInfo[1].GetFloat()));
-    
+    scene->scheduleUpdate();
     // run
     director->runWithScene(scene);
     

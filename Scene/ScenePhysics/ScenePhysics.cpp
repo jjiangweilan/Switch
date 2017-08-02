@@ -24,7 +24,7 @@ void ScenePhysics::createMapPhysicsOutline(TMXTiledMap* map){
     b2BodyDef bodyDef;
     bodyDef.type = b2BodyType::b2_staticBody;
     bodyDef.position = b2Vec2_zero;
-    physicsOutlineBody_ = world_->CreateBody(&bodyDef);
+    physicsOutlineBody_ = world_->CreateBody(&bodyDef); //create body
     
     auto objectGroups = map->getObjectGroups();
     auto outlines = map->getObjectGroup(GameInfo::gameInfo["tiled_map"]["physics_outline_name"].GetString());
@@ -33,7 +33,7 @@ void ScenePhysics::createMapPhysicsOutline(TMXTiledMap* map){
         b2FixtureDef fixture;
         b2ChainShape shape;
         fixture.filter.categoryBits = GameInfo::gameInfo["physics_category"]["wall"].GetInt();
-        
+        fixture.filter.maskBits = GameInfo::gameInfo["physics_category"]["hero"].GetInt();
         auto lineValueMap = line.asValueMap();
 
         Vec2 startPoint(lineValueMap["x"].asFloat(), lineValueMap["y"].asFloat());
@@ -42,12 +42,11 @@ void ScenePhysics::createMapPhysicsOutline(TMXTiledMap* map){
         b2Vec2 vertex[b2Points.size()];
         for (int i = 0; i < b2Points.size(); i++){
             vertex[i] = b2Points[i];
-            log("%f, %f", vertex[i].x, vertex[i].y);
         }
         
         shape.CreateChain(vertex, (int)b2Points.size());
         fixture.shape = &shape;
-        physicsOutlineBody_->CreateFixture(&fixture);
+        physicsOutlineBody_->CreateFixture(&fixture);  //create fixture
     }
 }
 
@@ -60,7 +59,6 @@ b2Points ScenePhysics::convertPointsToB2Points(TMXTiledMap* map, Vec2 startingPo
         float b2x = (origin.x + startingPoint.x + point.asValueMap()["x"].asFloat()) / PTM_RATIO;
         float b2y = ((startingPoint.y - point.asValueMap()["y"].asFloat())) / PTM_RATIO;
         
-        log("%f, %f", b2x, startingPoint.y + point.asValueMap()["y"].asFloat());
         b2Points.push_back(b2Vec2(b2x, b2y));
     }
     

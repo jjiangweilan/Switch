@@ -12,6 +12,7 @@
 
 enum HeroType {bro, sis};
 class Hero : public GameObject {
+public:
     ~Hero();
     /**
      create a hero
@@ -26,14 +27,14 @@ class Hero : public GameObject {
 
      @return the fixture def
      */
-    std::vector<b2FixtureDef> createDefaultBroFixtureDef();
+    static std::vector<b2FixtureDef> createDefaultBroFixtureDef();
     
     /**
      create default sis fixture def for wolrd to generate physics body
 
      @return the default sis fixture def
      */
-    std::vector<b2FixtureDef> createDefaultSisFixtureDef();
+    static std::vector<b2FixtureDef> createDefaultSisFixtureDef();
     
     /**
      override sprite's update
