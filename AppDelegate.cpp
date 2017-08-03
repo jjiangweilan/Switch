@@ -138,7 +138,6 @@ void AppDelegate::loadCacheInfomation()
 
     Data ss = FileUtils::getInstance()->getDataFromFile("res/gameInfo.json");
     std::string s((char*)ss.getBytes(), ss.getSize());
-    log("%s", s.c_str());
     info.Parse(s.c_str());
     
     

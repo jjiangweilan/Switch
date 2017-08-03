@@ -41,7 +41,7 @@ public:
 
      @param delta time step
      */
-    void update(float delta) override;
+    virtual void update() override;
 private:
     b2PolygonShape* collisionAreaShape;
     
