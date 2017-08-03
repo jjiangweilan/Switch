@@ -14,7 +14,7 @@ class JumpState;
 class WalkState;
 class FallState;
 class AttackState;
-
+class SummonState;
 class GameObjectStates {
 public:
     static IdleState idleState;
@@ -22,6 +22,7 @@ public:
     static WalkState walkState;
     static FallState fallState;
     static AttackState attackState;
+    static SummonState summonState;
 };
 
 #endif /* GameObjectState_hpp */

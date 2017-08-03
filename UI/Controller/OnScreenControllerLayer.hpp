@@ -10,11 +10,15 @@
 #define OnScreenControllerLayer_hpp
 
 #include "cocos2d.h"
-#include "Hero.hpp"
+#include "ControlComponent.hpp"
 USING_NS_CC;
 
 class OnScreenControllerLayer : public Sprite{
 private:
+    //object
+    ControlComponent* controlComponent_;
+    
+    //button
     Sprite* leftSpace;
     Sprite* rightSpace;
     Sprite* jump;
@@ -38,21 +42,9 @@ public:
     OnScreenControllerLayer(const Size& screenSize);
     ~OnScreenControllerLayer();
     
-    /*callback functions which respond to onScreen operations*/
-    std::function<void()> onRight; //on stick right
-    std::function<void()> onLeft; //on stick left
-    std::function<void()> onLeftRelease; // release on layer
-    std::function<void()> onRightRelease; // release on layer
-    std::function<void()> onPressJump;
-    std::function<void()> onPressAttack;
-    std::function<void()> onUp;
-    std::function<void()> onDown;
-    std::function<void()> onPressSummon;
-    std::function<void()> onPressSwitch;
-    
     //change ui
     void changeSummonAndRecallButton();
-
+    void setControlCompoenet(ControlComponent* cc) {controlComponent_ = cc;}
 };
 
 #endif /* OnScreenController_hpp */

@@ -30,13 +30,11 @@ private:
      designed to separate event makeing up
      */
     void registerEvent();
-    void heroInit();
     /* event script */
     void openDoor(){
         log("open door");
     }
     
-    void initUI();
 };
 
 #endif /* FirstScene_hpp */

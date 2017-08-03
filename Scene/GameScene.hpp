@@ -46,10 +46,12 @@ public:
     }
     
     /**
-     register a event
-
-     @param GameEvent the event
+     summon another hero
      */
+    void summon();
+    
+    void heroInit();
+    void initUI();
 protected:
     ScenePhysics* scenePhysics_;
     GameObject_v gameObjects_;
@@ -71,8 +73,6 @@ protected:
      @param std::string& the name of the evnet
      */
     void checkEvent(const std::string&);
-    
-    void initUI();
 private:
     TMXTiledMap* tiledMap_;
     GameEvent_v gameEvent_v_;
