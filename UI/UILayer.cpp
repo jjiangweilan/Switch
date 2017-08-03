@@ -8,8 +8,8 @@
 
 #include "UILayer.hpp"
 UILayer* UILayer::create(const Size& layerSize){
-    UILayer *pRet = new(std::nothrow) UILayer(layerSize);
-    if (pRet && pRet->init())
+    UILayer *pRet = new(std::nothrow) UILayer();
+    if (pRet && pRet->init(layerSize))
     {
         pRet->autorelease();
         return pRet;
@@ -26,7 +26,10 @@ void UILayer::changeHealth(int health_){
     health->setString(newHealth);
 }
 
-bool UILayer::init(){
+bool UILayer::init(const Size& size){
+    Sprite::init();
+    
+    layerSize = size;
     Sprite::init();
     controllerLayer = OnScreenControllerLayer::create(layerSize);
     controllerLayer->setAnchorPoint(Vec2::ZERO);
@@ -46,10 +49,7 @@ bool UILayer::init(){
     return true;
 }
 
-UILayer::UILayer(const Size& layerSize){
-    this->layerSize = layerSize;
-    
-    
+UILayer::UILayer(){
 }
 UILayer::~UILayer(){
     

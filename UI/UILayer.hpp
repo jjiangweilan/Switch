@@ -26,15 +26,22 @@ public:
     
     
     static UILayer* create(const Size&);
-    virtual bool init() override;
+    bool init(const Size&);
     
     
     /*call this method with the amount to be displayed*/
     void changeHealth(int);
     
+    /**
+     set the controlcompoenent that onsceen controller needs to connect to
+
+     @param ControlComponent the control compoenet
+     */
+    void setControlCompoenet(ControlComponent* cc){controllerLayer->setControlCompoenet(cc);};
+    
     //getter and setter
     OnScreenControllerLayer* getControllerLayer(){return controllerLayer;}
-    UILayer(const Size&);
+    UILayer();
     ~UILayer();
 };
 

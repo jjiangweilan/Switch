@@ -16,6 +16,7 @@ void BaseState::enter(GameObject * entity, commandType type){
     std::string animationName = entity->getObjectName() + "_" + actionType;
     auto animation = AnimationCache::getInstance()->getAnimation(animationName);
     if (animation == nullptr)return;
+    
     animation->setLoops(-1);
     
     auto animated = Animate::create(animation);

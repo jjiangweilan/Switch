@@ -12,9 +12,10 @@
 #include "WalkState.hpp"
 #include "FallState.hpp"
 #include "AttackState.hpp"
-
+#include "SummonState.hpp"
 IdleState GameObjectStates::idleState = IdleState("idle");
 JumpState GameObjectStates::jumpState = JumpState("jump");
 WalkState GameObjectStates::walkState = WalkState("walk");
 FallState GameObjectStates::fallState = FallState("fall");
 AttackState GameObjectStates::attackState = AttackState("attack");
+SummonState GameObjectStates::summonState = SummonState("summon");

@@ -60,19 +60,19 @@ void OnScreenControllerLayer::addLeftSpace(){
         }
         
         auto stickRelativePos = stick->getPosition() - stickLayer->getPosition();
-        if (stickRelativePos.x > 30){if (onRight)onRight();}
-        else if (stickRelativePos.x < -30){if(onLeft)onLeft();}
+        if (stickRelativePos.x > 30){if (controlComponent_)controlComponent_->onRight();}
+        else if (stickRelativePos.x < -30){if(controlComponent_)controlComponent_->onLeft();}
         
         //this is for testing. The original design is trigglering abilities
-        if (stickRelativePos.y > 30){if(onUp)onUp();}
-        else if (stickRelativePos.y < -30){if(onDown)onDown();}
+        if (stickRelativePos.y > 30){if(controlComponent_)controlComponent_->onJump();}
+        //else if (stickRelativePos.y < -30){if(controlComponent_);}
         
         return true;
     };
     
     touch->onTouchEnded = [&](Touch* touch, Event* event) -> bool {
         this->hideStickLayer();
-        if(onLeftRelease)onLeftRelease();
+        if(controlComponent_)controlComponent_->onLeftRelease();
         return true;
     };
     
@@ -91,12 +91,12 @@ void OnScreenControllerLayer::addRightSpace(){
     touch->onTouchBegan = [&](Touch* touch, Event* event) -> bool{
         auto pos = touch->getLocation();
         if (!rightSpace->getBoundingBox().containsPoint(pos)) return false;
-        else if (jump->getBoundingBox().containsPoint(pos)){if(onPressJump)onPressJump();}
+        else if (jump->getBoundingBox().containsPoint(pos)){if(controlComponent_)controlComponent_->onJump();}
         else if (summon->getBoundingBox().containsPoint(pos)){
-            if(onPressSummon)onPressSummon();
+            if(controlComponent_)controlComponent_->onSummon();
             changeSummonAndRecallButton();
         }
-        else if (switch_->getBoundingBox().containsPoint(pos)){if(onPressSwitch)onPressSwitch();}
+        else if (switch_->getBoundingBox().containsPoint(pos)){if(controlComponent_)controlComponent_->onSwitch();}
         return true;
     };
     
@@ -122,11 +122,6 @@ void OnScreenControllerLayer::addRightController(){
 }
 
 OnScreenControllerLayer::OnScreenControllerLayer(const Size& screenSize) : screenSize(screenSize){
-    onRight = NULL;
-    onLeft = NULL;
-    onLeftRelease = NULL;
-    onRightRelease = NULL;
-    onPressJump = NULL;
     
     addLeftSpace();
     addRightSpace();

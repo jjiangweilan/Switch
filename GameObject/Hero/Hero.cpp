@@ -16,6 +16,7 @@ Hero* Hero::create(const std::string& name, HeroType heroType, b2Body* body){
         ptr->autorelease();
         return ptr;
     }
+    
     delete ptr;
     return nullptr;
 }
