@@ -22,4 +22,10 @@ void GameObject::update(){
         auto bodyPos = physicsComponent_->getBodyPosition();
         setPosition(Vec2(bodyPos.x * PTM_RATIO, bodyPos.y * PTM_RATIO));
     }
+    auto newState = currentState_->observing(this);
+    if(newState){
+        currentState_->leave(this);
+        currentState_ = newState;
+        currentState_->enter(this, none);
+    }
 }

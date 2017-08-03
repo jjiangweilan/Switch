@@ -43,6 +43,16 @@ public:
      should be called when press switch
      */
     void onSwitch();
+    
+    /**
+     should be called when press released on left space
+     */
+    void onLeftRelease();
+    
+    /**
+     should be called when we want the container to be idle
+     */
+    void onIdle();
 };
 
 #endif /* ControlComponent_hpp */

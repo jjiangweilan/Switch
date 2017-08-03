@@ -60,7 +60,7 @@ public:
     std::string getObjectName() {return objectName_;}
     
     /* support */
-    void update();
+    virtual void update();
 protected:
     BaseState* currentState_;
     

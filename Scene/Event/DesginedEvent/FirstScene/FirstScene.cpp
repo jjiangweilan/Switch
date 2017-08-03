@@ -86,7 +86,8 @@ void FirstScene::initUI(){
     auto bro_controlCompoenet = bro->getControlComponent();
     controller->onRight = CC_CALLBACK_0(ControlComponent::onRight, bro_controlCompoenet);
     controller->onLeft = CC_CALLBACK_0(ControlComponent::onLeft, bro_controlCompoenet);
-    
+    controller->onLeftRelease = CC_CALLBACK_0(ControlComponent::onLeftRelease, bro_controlCompoenet);
+    controller->onPressJump = CC_CALLBACK_0(ControlComponent::onJump, bro_controlCompoenet);
 }
 
 void FirstScene::update(float delta){

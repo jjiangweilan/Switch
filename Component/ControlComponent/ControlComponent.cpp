@@ -47,11 +47,29 @@ void ControlComponent::onSummon(){
     }
 }
 
+void ControlComponent::onIdle(){
+    BaseState* newState = container_->currentState_->commandHandler(container_, idle);
+    if (newState){
+        container_->currentState_->leave(container_);
+        container_->currentState_ = newState;
+        container_->currentState_->enter(container_, idle);
+    }
+}
+
 void ControlComponent::onSwitch(){
     BaseState* newState = container_->currentState_->commandHandler(container_, switch_);
     if (newState){
         container_->currentState_->leave(container_);
         container_->currentState_ = newState;
         container_->currentState_->enter(container_, switch_);
+    }
+}
+
+void ControlComponent::onLeftRelease(){
+    BaseState* newState = container_->currentState_->commandHandler(container_, leftRelease);
+    if (newState){
+        container_->currentState_->leave(container_);
+        container_->currentState_ = newState;
+        container_->currentState_->enter(container_, leftRelease);
     }
 }

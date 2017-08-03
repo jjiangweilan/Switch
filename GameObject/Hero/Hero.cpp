@@ -38,11 +38,11 @@ Hero::~Hero(){
     if(collisionAreaShape)delete collisionAreaShape;
 }
 
-void Hero::update(float delta){
-    b2Vec2 b2Pos = getPhysicsComponent()->getBodyPosition();
-    this->setPosition(Vec2(b2Pos.x * PTM_RATIO, b2Pos.y * PTM_RATIO));
+void Hero::update(){
+    GameObject::update();
 }
 
 bool Hero::init(){
     return Sprite::init();
+    
 }
