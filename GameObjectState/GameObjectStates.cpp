@@ -13,9 +13,16 @@
 #include "FallState.hpp"
 #include "AttackState.hpp"
 #include "SummonState.hpp"
-IdleState GameObjectStates::idleState = IdleState("idle");
-JumpState GameObjectStates::jumpState = JumpState("jump");
-WalkState GameObjectStates::walkState = WalkState("walk");
-FallState GameObjectStates::fallState = FallState("fall");
-AttackState GameObjectStates::attackState = AttackState("attack");
-SummonState GameObjectStates::summonState = SummonState("summon");
+#include "SummonedState.hpp"
+#include "RecallState.hpp"
+#include "RecalledState.hpp"
+
+IdleState GameObjectStates::idleState("idle");
+JumpState GameObjectStates::jumpState("jump");
+WalkState GameObjectStates::walkState("walk");
+FallState GameObjectStates::fallState("fall");
+AttackState GameObjectStates::attackState("attack");
+SummonState GameObjectStates::summonState("summon");
+SummonedState GameObjectStates::summonedState("summoned");
+RecallState GameObjectStates::recallState("recall");
+RecalledState GameObjectStates::recalledState("recalled");

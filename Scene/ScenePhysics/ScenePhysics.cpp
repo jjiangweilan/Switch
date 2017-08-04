@@ -7,7 +7,7 @@
 //
 
 #include "ScenePhysics.hpp"
-
+#include "QueryCallback.hpp"
 ScenePhysics::ScenePhysics(b2Vec2 gravity, b2ContactListener* listener) : world_(new b2World(gravity)), timeStep_(1.0 / 60.0), velocityIterations_(3), positionIterations_(8){
     world_->SetContactListener(listener);
 };
@@ -64,3 +64,14 @@ b2Points ScenePhysics::convertPointsToB2Points(TMXTiledMap* map, Vec2 startingPo
     
     return b2Points;
 }
+
+bool ScenePhysics::hasCollisionInArea(b2Vec2 center, float side){
+    b2AABB aabb;
+    QueryCallback callback;
+    aabb.lowerBound.Set(center.x - side / 2.0, center.y - side / 2.0);
+    aabb.upperBound.Set(center.x + side / 2.0, center.y  + side / 2.0);
+    
+    world_->QueryAABB(&callback, aabb);
+    return !callback.isEmpty();
+}
+

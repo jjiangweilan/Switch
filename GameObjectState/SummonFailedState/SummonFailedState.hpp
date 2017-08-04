@@ -1,22 +1,22 @@
 //
-//  SummonState.hpp
+//  SummonFailedState.hpp
 //  switch
 //
-//  Created by jiehong jiang on 8/3/17.
+//  Created by jiehong jiang on 8/4/17.
 //
 //
 
-#ifndef SummonState_hpp
-#define SummonState_hpp
+#ifndef SummonFailedState_hpp
+#define SummonFailedState_hpp
 #include "BaseState.hpp"
-class SummonState : public BaseState {
+
+class SummonFailedState : public BaseState {
 public:
-    SummonState(std::string);
+    SummonFailedState(std::string name) : BaseState(name){};
     virtual BaseState* commandHandler(GameObject* entity, commandType) override;
     virtual BaseState* observing(GameObject*) override;
     
     virtual void enter(GameObject* entity, commandType) override;
     virtual void leave(GameObject*) override;
 };
-
-#endif /* SummonState_hpp */
+#endif /* SummonFailedState_hpp */

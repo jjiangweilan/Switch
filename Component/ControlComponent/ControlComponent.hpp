@@ -36,8 +36,10 @@ public:
     
     /**
      should be called when press summon
+
+     @return return true if hero successfully enter summon state
      */
-    void onSummon();
+    bool onSummon();
     
     /**
      should be called when press switch
@@ -53,6 +55,28 @@ public:
      should be called when we want the container to be idle
      */
     void onIdle();
+    
+    /**
+     shold be called when summon failed
+     */
+    void onSummonFailed();
+    
+    /**
+     should be called when summoned
+     */
+    void onSummoned();
+    
+    /**
+     shoule be called when recalling another hero
+
+     @return true if hero successfully enter recall state
+     */
+    bool onRecall();
+    
+    /**
+     should be called when recalled
+     */
+    void onRecalled();
 };
 
 #endif /* ControlComponent_hpp */

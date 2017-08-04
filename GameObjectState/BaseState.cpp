@@ -17,7 +17,10 @@ void BaseState::enter(GameObject * entity, commandType type){
     auto animation = AnimationCache::getInstance()->getAnimation(animationName);
     if (animation == nullptr)return;
     
-    animation->setLoops(-1);
+    if(type == summon || type == summoned || type == recall || type == recalled)
+        animation->setLoops(1);
+    else
+        animation->setLoops(-1);
     
     auto animated = Animate::create(animation);
     animated->setTag(1);

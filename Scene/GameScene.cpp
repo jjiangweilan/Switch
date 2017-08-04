@@ -8,7 +8,8 @@
 
 #include "GameScene.hpp"
 #include "Hero.hpp"
-GameScene::GameScene() : scenePhysics_(NULL), gameObjects_(), gameEvent_v_(), tiledMap_(NULL){};
+#include "SummonSystem.hpp"
+GameScene::GameScene() : scenePhysics_(NULL), summonSystem_(NULL), gameObjects_(), gameEvent_v_(), tiledMap_(NULL){};
 GameScene::~GameScene(){
     if(scenePhysics_) delete scenePhysics_;
     for (auto event : gameEvent_v_){
@@ -24,7 +25,6 @@ bool GameScene::init(TMXTiledMap* map, const b2Vec2& gravity){
         map->setPosition(origin);
         addChild(tiledMap_);
         
-        heroInit();
         return true;
     }
     
@@ -35,7 +35,7 @@ void GameScene::initUI(){
     Size size = Director::getInstance()->getVisibleSize();
     uiLayer_ = UILayer::create(size);
     
-    auto bro = static_cast<Hero*>( getChildByTag(GameInfo::gameInfo["hero_information"]["bro"]["tag"].GetInt()));
+    auto bro = getChildByName<Hero*>("bro");
     uiLayer_->setControlCompoenet(bro->getControlComponent());
     addChild(uiLayer_);
 }
@@ -47,18 +47,36 @@ void GameScene::update(float delta){
     }
 }
 
-void GameScene::summon(){
+void GameScene::initHero(){
+    rapidjson::Value& broP = GameInfo::gameInfo["hero_information"]["bro"]["first_scene"]["init_pos"];
+    rapidjson::Value& sisP = GameInfo::gameInfo["hero_information"]["sis"]["first_scene"]["init_pos"];
     
+    Vec2 broPos(broP[0].GetInt(), broP[1].GetInt());
+    Vec2 sisPos(sisP[0].GetInt(), sisP[1].GetInt());
+    
+    auto bro = Hero::create("egg_shell", HeroType::bro, createBroBody(broPos));
+    bro->setName("bro");
+    gameObjects_.push_back(bro);
+    this->addChild(bro);
+    
+    auto sis = Hero::create("egg_shell", HeroType::sis, createSisBody(sisPos));
+    sis->setName("sis");
+    gameObjects_.push_back(sis);
+    this->addChild(sis);
+    
+    hideHero(sis);
 }
 
-void GameScene::heroInit(){
+b2Body* GameScene::createBroBody(Vec2 pos){
+    //bro
     rapidjson::Document& d = GameInfo::gameInfo;
     rapidjson::Value& broInfo = d["hero_information"]["bro"];
+    
     //body
-    b2BodyDef broBodyDef;
-    broBodyDef.fixedRotation = true;
-    broBodyDef.position = b2Vec2(broInfo["first_scene"]["init_pos"][0].GetInt() / PTM_RATIO, broInfo["first_scene"]["init_pos"][1].GetInt() / PTM_RATIO);
-    broBodyDef.type = b2_dynamicBody;
+    b2BodyDef BodyDef;
+    BodyDef.fixedRotation = true;
+    BodyDef.position = b2Vec2(pos.x / PTM_RATIO, pos.y / PTM_RATIO);
+    BodyDef.type = b2_dynamicBody;
     //fixture
     
     b2FixtureDef collisionArea;
@@ -71,12 +89,35 @@ void GameScene::heroInit(){
     collisionArea.filter.categoryBits = d["physics_category"]["hero"].GetInt();
     collisionArea.filter.maskBits = d["physics_category"]["wall"].GetInt();
     
-    auto body = scenePhysics_->getWorld()->CreateBody(&broBodyDef);
+    auto body = scenePhysics_->getWorld()->CreateBody(&BodyDef);
     body->CreateFixture(&collisionArea);
-    auto bro = Hero::create("egg_shell", HeroType::bro, body);
-    bro->setTag(broInfo["tag"].GetInt());
-    gameObjects_.push_back(bro);
-    this->addChild(bro);
+    return body;
+}
+
+b2Body* GameScene::createSisBody(Vec2 pos){
+    b2BodyDef BodyDef;
+    
+    rapidjson::Value& sisInfo = GameInfo::gameInfo["hero_information"]["sis"];
+    //body
+    BodyDef.fixedRotation = true;
+    BodyDef.position = b2Vec2(pos.x / PTM_RATIO, pos.y / PTM_RATIO);
+    BodyDef.type = b2_dynamicBody;
+    //fixture
+    
+    b2FixtureDef collisionArea;
+    b2PolygonShape collisionAreaShape;
+    collisionAreaShape.SetAsBox(sisInfo["body_size"][0].GetFloat() / PTM_RATIO, sisInfo["body_size"][1].GetFloat() / PTM_RATIO);
+    collisionArea.density = sisInfo["density"].GetFloat();
+    collisionArea.shape = &collisionAreaShape;
+    collisionArea.restitution = 0;
+    collisionArea.friction = 0;
+    collisionArea.filter.categoryBits = GameInfo::gameInfo["physics_category"]["hero"].GetInt();
+    collisionArea.filter.maskBits = GameInfo::gameInfo["physics_category"]["wall"].GetInt();
+    
+    auto sisBody = scenePhysics_->getWorld()->CreateBody(&BodyDef);
+    sisBody->CreateFixture(&collisionArea);
+    
+    return sisBody;
 }
 
 void GameScene::registerEvent(const std::string & name, int count, std::function<void()> scrpit){
@@ -85,4 +126,44 @@ void GameScene::registerEvent(const std::string & name, int count, std::function
 
 void GameScene::checkEvent(const std::string & name){
     gameEvent_v_[name]->checkOneMission();
+}
+
+void GameScene::hideHero(Hero* hero){
+    //destroy body
+    scenePhysics_->getWorld()->DestroyBody(reinterpret_cast<b2Body*>(hero->getUserData()));
+    hero->getPhysicsComponent()->removeBody();
+    
+    //remove from game objects
+    for (auto iter = gameObjects_.begin(); iter != gameObjects_.end();iter++){
+        if (*iter == hero){
+            gameObjects_.erase(iter);
+            break;
+        }
+    }
+    
+    hero->setVisible(false);
+}
+
+void GameScene::showHero(Hero * hero, Vec2 pos){
+    //add body
+    if (hero->getName() == "bro"){
+        hero->getPhysicsComponent()->setBody(createBroBody(pos));
+    }
+    else if (hero->getName() == "sis"){
+        hero->getPhysicsComponent()->setBody(createSisBody(pos));
+    }
+    
+    //add to game_objects
+    hero->getControlComponent()->onIdle();
+    gameObjects_.push_back(hero);
+    
+    hero->setVisible(true);
+}
+
+void GameScene::initSummonSystem(){
+    auto bro = getChildByName<Hero*>("bro");
+    auto sis = getChildByName<Hero*>("sis");
+    
+    assert(bro != NULL && sis != NULL);
+    summonSystem_ = new SummonSystem(bro, sis, this);
 }

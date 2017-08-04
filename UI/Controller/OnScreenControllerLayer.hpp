@@ -21,16 +21,29 @@ private:
     //button
     Sprite* leftSpace;
     Sprite* rightSpace;
-    Sprite* jump;
-    Sprite* switch_;
-    Sprite* summon;
-    bool isSummonButton = true;
-    
+    bool isSummoned = false;
+    bool hasSwitch = false;
     Sprite* stickLayer;
     Sprite* stick;
     
     Size screenSize;
     
+    //functional
+    /**
+     when summon button is pressed, on screen controller layer should show switch button
+     */
+    void showSwitchButton();
+    
+    /**
+     when recall button is pressed, on screen controller layer should hide switch button
+     */
+    void hideSwitchButton();
+    
+    /**
+     summon and recall button shouldn't appear on screen in the same time.
+     */
+    void switchSummonAndRecallButton();
+    //support
     void addLeftSpace();
     void addRightSpace();
     void showStickLayer(const Vec2& pos);
@@ -43,7 +56,7 @@ public:
     ~OnScreenControllerLayer();
     
     //change ui
-    void changeSummonAndRecallButton();
+    
     void setControlCompoenet(ControlComponent* cc) {controlComponent_ = cc;}
 };
 

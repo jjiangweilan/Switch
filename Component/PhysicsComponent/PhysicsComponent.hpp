@@ -60,6 +60,9 @@ public:
     void setVelocity(const b2Vec2& v, bool adjustMovingState = true);
     
     void setMoving(bool moving) {isMoving_ = moving;}
+    
+    void removeBody() {body_ = NULL;}
+    void setBody(b2Body* body) {body_ = body;};
 private:
     
     bool  isMoving_;

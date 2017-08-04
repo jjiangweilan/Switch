@@ -23,16 +23,16 @@ Hero* Hero::create(const std::string& name, HeroType heroType, b2Body* body){
 
 Hero::Hero(const std::string& name, HeroType heroType, b2Body* body) : GameObject(name){
     rapidjson::Document& d = GameInfo::gameInfo;
+    rapidjson::Value& info = heroType == bro ? d["hero_information"]["bro"] : d["hero_information"]["sis"];
+
+    body->SetUserData(this);
+    this->setUserData(body);
+    GameObject::setPhysicsComponent(new PhysicsComponent(this, body, info["move_speed"].GetInt(), info["jump_speed"].GetInt()));
     
-    if (heroType == bro){
-        rapidjson::Value& broInfo = d["hero_information"]["bro"];
-        body->SetUserData(this);
-        GameObject::setPhysicsComponent(new PhysicsComponent(this, body, broInfo["move_speed"].GetInt(), broInfo["jump_speed"].GetInt()));
+    GameObject::setControlComponent(new ControlComponent(this));
     
-        GameObject::setControlComponent(new ControlComponent(this));
-        
-        currentState_->enter(this, idle);
-    }
+    currentState_->enter(this, idle);
+    
 }
 
 Hero::~Hero(){

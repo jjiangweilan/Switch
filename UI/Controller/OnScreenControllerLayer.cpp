@@ -48,7 +48,7 @@ void OnScreenControllerLayer::addLeftSpace(){
         float length = CODiff.length();
         
         stick->setPosition(currPos);
-
+        
         //move stick
         if (length >= radius){
             Vec2 CPDiff = currPos - prePos;
@@ -60,12 +60,12 @@ void OnScreenControllerLayer::addLeftSpace(){
         }
         
         auto stickRelativePos = stick->getPosition() - stickLayer->getPosition();
+        
+        //right
         if (stickRelativePos.x > 30){if (controlComponent_)controlComponent_->onRight();}
+        //left
         else if (stickRelativePos.x < -30){if(controlComponent_)controlComponent_->onLeft();}
         
-        //this is for testing. The original design is trigglering abilities
-        if (stickRelativePos.y > 30){if(controlComponent_)controlComponent_->onJump();}
-        //else if (stickRelativePos.y < -30){if(controlComponent_);}
         
         return true;
     };
@@ -88,15 +88,36 @@ void OnScreenControllerLayer::addRightSpace(){
     
     auto touch = EventListenerTouchOneByOne::create();
     addChild(rightSpace);
+    
+    
     touch->onTouchBegan = [&](Touch* touch, Event* event) -> bool{
+        auto jump = getChildByName<Sprite*>("jump");
+        auto summonAndRecall = getChildByName<Sprite*>("sr");
+        auto switch_ = getChildByName<Sprite*>("switch");
+        
         auto pos = touch->getLocation();
         if (!rightSpace->getBoundingBox().containsPoint(pos)) return false;
-        else if (jump->getBoundingBox().containsPoint(pos)){if(controlComponent_)controlComponent_->onJump();}
-        else if (summon->getBoundingBox().containsPoint(pos)){
-            if(controlComponent_)controlComponent_->onSummon();
-            changeSummonAndRecallButton();
+        //jump
+        else if (jump->getBoundingBox().containsPoint(pos)){
+            if(controlComponent_) controlComponent_->onJump();
         }
-        else if (switch_->getBoundingBox().containsPoint(pos)){if(controlComponent_)controlComponent_->onSwitch();}
+        //summon and recall
+        else if (summonAndRecall->getBoundingBox().containsPoint(pos)){
+            if(controlComponent_ && !isSummoned){
+                isSummoned = controlComponent_->onSummon();
+            }
+            
+            else if (controlComponent_ && isSummoned) {
+                isSummoned = !controlComponent_->onRecall();
+            }
+            
+            switchSummonAndRecallButton();
+        }
+        
+        //switch
+        else if (hasSwitch && switch_->getBoundingBox().containsPoint(pos)){if(controlComponent_)
+            controlComponent_->onSwitch();
+        }
         return true;
     };
     
@@ -135,36 +156,54 @@ OnScreenControllerLayer::OnScreenControllerLayer(const Size& screenSize) : scree
     stick->setVisible(false);
     
     //jumpButton
-    jump = Sprite::create("res/UI/onScreenControl/jump.png");
+    auto jump = Sprite::create("res/UI/onScreenControl/jump.png");
+    jump->setName("jump");
     jump->setPosition(Vec2(5.0 / 6.0 * screenSize.width, 1.0 / 4.0 * screenSize.height));
     jump->setScale(1.3);
     
     //switch button
-    switch_ = Sprite::create("res/UI/onScreenControl/jump.png");
+    auto switch_ = Sprite::create("res/UI/onScreenControl/switch.png");
     switch_->setPosition(Vec2(5.0 / 6.0 * screenSize.width, 2.0 / 4.0 * screenSize.height));
     switch_->setScale(1.3);
+    switch_->setName("switch");
+    switch_->setVisible(false);
     
     //summon and recall button
-    summon = Sprite::create("res/UI/onScreenControl/jump.png");
-    summon->setPosition(Vec2(5.0 / 6.0 * screenSize.width, 3.0 / 4.0 * screenSize.height));
-    summon->setScale(1.4);
+    auto summonAndRecall = Sprite::create("res/UI/onScreenControl/summon.png");
+    summonAndRecall->setPosition(Vec2(5.0 / 6.0 * screenSize.width, 3.0 / 4.0 * screenSize.height));
+    summonAndRecall->setScale(1.4);
+    summonAndRecall->setName("sr");
     
     addChild(switch_);
-    addChild(summon);
     addChild(jump);
+    addChild(summonAndRecall);
     addChild(stick);
     addChild(stickLayer);
 }
 
-void OnScreenControllerLayer::changeSummonAndRecallButton(){
-    if(isSummonButton){
-        auto frame = SpriteFrame::create("res/UI/onScreenControl/stick.png", Rect(0, 0, summon->getContentSize().width, summon->getContentSize().height));
-        summon->setSpriteFrame(frame);
+void OnScreenControllerLayer::switchSummonAndRecallButton(){
+    auto sr = getChildByName<Sprite*>("sr");
+    if (isSummoned){ // to recall
+        Texture2D *texture = Director::getInstance()->getTextureCache()->addImage("res/UI/onScreenControl/recall.png");
+        auto size = texture->getContentSize();
+        auto frame = SpriteFrame::createWithTexture(texture, Rect(0, 0, size.width, size.height));
+        sr->setSpriteFrame(frame);
+        
+        hasSwitch = true;
+        auto switch_ = getChildByName<Sprite*>("switch");
+        switch_->setVisible(true);
     }
-    else{
-        auto frame = SpriteFrame::create("res/UI/onScreenControl/jump.png", Rect(0, 0, summon->getContentSize().width, summon->getContentSize().height));
-        summon->setSpriteFrame(frame);
+    else {
+        Texture2D *texture = Director::getInstance()->getTextureCache()->addImage("res/UI/onScreenControl/summon.png");
+        auto size = texture->getContentSize();
+        auto frame = SpriteFrame::createWithTexture(texture, Rect(0, 0, size.width, size.height));
+        sr->setSpriteFrame(frame);
+        
+        hasSwitch = false;
+        auto switch_ = getChildByName<Sprite*>("switch");
+        switch_->setVisible(false);
     }
+    
 }
 OnScreenControllerLayer::~OnScreenControllerLayer(){
     
