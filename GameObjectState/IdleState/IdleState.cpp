@@ -9,6 +9,11 @@
 #include "IdleState.hpp"
 #include "WalkState.hpp"
 #include "AttackState.hpp"
+#include "SummonState.hpp"
+#include "RecallState.hpp"
+#include "GameScene.hpp"
+#include "SummonSystem.hpp"
+#include "RecalledState.hpp"
 IdleState::IdleState(std::string actiontType) : BaseState(actiontType){};
 BaseState* IdleState::commandHandler(GameObject* entity, commandType type){
     switch (type) {
@@ -21,6 +26,21 @@ BaseState* IdleState::commandHandler(GameObject* entity, commandType type){
             break;
         case attack:
             return &GameObjectStates::attackState;
+            break;
+        case summon:
+            return &GameObjectStates::summonState;
+            break;
+        case recall:
+            return &GameObjectStates::recallState;
+            break;
+        case recalled:
+            return &GameObjectStates::recalledState;
+            break;
+        case switch_: {
+            auto scene = static_cast<GameScene*>(entity->getParent());
+            auto hero = entity->getName() == "bro" ? scene->getChildByName<Hero*>("sis") : scene->getChildByName<Hero*>("bro");
+            scene->getSummonSystem()->switchTo(hero);
+        }
             break;
         default:
             break;

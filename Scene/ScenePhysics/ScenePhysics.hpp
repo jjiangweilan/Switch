@@ -44,6 +44,15 @@ public:
      @return points based on b2 coordinate system
      */
     b2Points convertPointsToB2Points(TMXTiledMap* map, cocos2d::Vec2, cocos2d::ValueVector);
+    
+    /**
+     check if there is a fixture within in the area
+
+     @param center the center of the area
+     @param side the side length of the area
+     @return whether there is a body
+     */
+    bool hasCollisionInArea(b2Vec2 center, float side);
 private:
     const float timeStep_;
     const int velocityIterations_;

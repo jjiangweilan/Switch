@@ -15,8 +15,9 @@
 #include "GameInfo.hpp"
 #include "GameObject.hpp"
 #include "GameEvent.hpp"
-
 #include "UILayer.hpp"
+#include "Hero.hpp"
+class SummonSystem;
 USING_NS_CC;
 typedef std::vector<GameObject*> GameObject_v;
 typedef std::map<std::string, GameEvent*> GameEvent_v;
@@ -46,16 +47,62 @@ public:
     }
     
     /**
-     summon another hero
+     init heros
      */
-    void summon();
+    void initHero();
     
-    void heroInit();
+    /**
+     init Summon Sytem
+     */
+    void initSummonSystem();
+    
+    /**
+     init UI
+     */
     void initUI();
+    
+    /**
+     create the body of sis
+
+     @return the body
+     */
+    b2Body* createSisBody(Vec2 pos);
+    
+    /**
+     create the body of bro
+
+     @return the body
+     */
+    b2Body* createBroBody(Vec2 pos);
+    
+    ScenePhysics* getScenePhysics(){return scenePhysics_;}
+    SummonSystem* getSummonSystem(){return summonSystem_;}
+    
+    /**
+     this will delete hero's body using scenePhysics, remove hero from gameObjects and hide it's sprite.
+     
+     @param Hero hero to hide
+     */
+    void hideHero(Hero*);
+    
+    /**
+     this will add hero's body to scenePhysics, add hero to gameObjects_ and show it's srpite
+     
+     @param Hero hero to show
+     */
+    void showHero(Hero*, Vec2 pos);
+    
+    /**
+     get uiLayer
+
+     @return the UILayer
+     */
+    UILayer* getUILayer(){return uiLayer_;}
 protected:
     ScenePhysics* scenePhysics_;
     GameObject_v gameObjects_;
     UILayer* uiLayer_;
+    SummonSystem* summonSystem_;
     
     bool init(TMXTiledMap* map, const b2Vec2& gravity);
     /**

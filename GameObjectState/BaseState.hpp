@@ -12,7 +12,7 @@
 class GameObject;
 USING_NS_CC;
 enum commandType {
-    goLeft, switch_, goRight, jump, idle, static_, leftRelease, attack, summon, none
+    goLeft, switch_, goRight, jump, idle, static_, leftRelease, attack, summon, summoned, summonFailed,recall, recalled, none
 };
 
 class BaseState {

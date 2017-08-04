@@ -41,8 +41,10 @@ bool FirstScene::init(TMXTiledMap* map, const b2Vec2& gravity){
     };
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(li, this);
     
-    heroInit();
+    //
+    initHero();
     initUI();
+    initSummonSystem();
     return true;
 }
 

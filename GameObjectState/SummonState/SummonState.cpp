@@ -10,6 +10,7 @@
 #include "GameObject.hpp"
 #include "IdleState.hpp"
 #include "GameScene.hpp"
+#include "SummonSystem.hpp"
 SummonState::SummonState(std::string name) : BaseState(name){
     
 }
@@ -19,8 +20,8 @@ BaseState* SummonState::commandHandler(GameObject* entity, commandType){
 }
 BaseState* SummonState::observing(GameObject* entity){
     auto animate = static_cast<Animate*>(entity->getActionByTag(1));
-    unsigned int loop = animate->getAnimation()->getLoops();
-    if (loop == 1){
+    
+    if (animate == NULL){
         return &GameObjectStates::idleState;
     }
     return nullptr;
@@ -29,7 +30,10 @@ BaseState* SummonState::observing(GameObject* entity){
 void SummonState::enter(GameObject* entity, commandType type){
     BaseState::enter(entity, type);
     auto scene = static_cast<GameScene*>(entity->getParent());
-    scene->summon();
+    if (entity->getName() == "bro")
+        scene->getSummonSystem()->summon(sis);
+    else
+        scene->getSummonSystem()->summon(bro);
 }
 void SummonState::leave(GameObject* entity){
     
