@@ -16,6 +16,7 @@
 #include "SummonedState.hpp"
 #include "RecallState.hpp"
 #include "RecalledState.hpp"
+#include "SummonFailedState.hpp"
 
 IdleState GameObjectStates::idleState("idle");
 JumpState GameObjectStates::jumpState("jump");
@@ -26,3 +27,4 @@ SummonState GameObjectStates::summonState("summon");
 SummonedState GameObjectStates::summonedState("summoned");
 RecallState GameObjectStates::recallState("recall");
 RecalledState GameObjectStates::recalledState("recalled");
+SummonFailedState GameObjectStates::summonFailedState("summon_failed");

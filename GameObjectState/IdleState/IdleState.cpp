@@ -14,6 +14,8 @@
 #include "GameScene.hpp"
 #include "SummonSystem.hpp"
 #include "RecalledState.hpp"
+#include "SummonFailedState.hpp"
+#include "SummonedState.hpp"
 IdleState::IdleState(std::string actiontType) : BaseState(actiontType){};
 BaseState* IdleState::commandHandler(GameObject* entity, commandType type){
     switch (type) {
@@ -27,7 +29,30 @@ BaseState* IdleState::commandHandler(GameObject* entity, commandType type){
         case attack:
             return &GameObjectStates::attackState;
             break;
-        case summon:
+        case summon:{
+            auto scene = static_cast<GameScene*>(entity->getParent());
+            auto physics = scene->getScenePhysics();
+            std::string summonName = entity->getName() == "bro" ? "sis" : "bro";
+            std::string currentName = entity->getName();
+            float summonWidth = GameInfo::gameInfo["hero_information"][summonName.c_str()]["body_size"][0].GetFloat();
+            bool hasCollision = false;
+            auto hero = dynamic_cast<Hero*>(entity);
+            assert(hero != NULL);
+            b2Vec2 heroPos = hero->getPhysicsComponent()->getBodyPosition();
+            
+            float checkPointDistance = GameInfo::gameInfo["hero_information"][currentName.c_str()]["body_size"][0].GetFloat() / PTM_RATIO + 1; //width
+            
+            if (!entity->isFlippedX()){
+                hasCollision = physics->hasCollisionInArea(b2Vec2(heroPos.x + checkPointDistance, heroPos.y), summonWidth / PTM_RATIO);
+            }
+            else {
+                hasCollision = physics->hasCollisionInArea(b2Vec2(heroPos.x - checkPointDistance, heroPos.y), summonWidth / PTM_RATIO);
+            }
+            
+            if (hasCollision){
+                return nullptr;
+            }
+        }
             return &GameObjectStates::summonState;
             break;
         case recall:
@@ -42,6 +67,8 @@ BaseState* IdleState::commandHandler(GameObject* entity, commandType type){
             scene->getSummonSystem()->switchTo(hero);
         }
             break;
+        case summoned:
+            return &GameObjectStates::summonedState;
         default:
             break;
     }

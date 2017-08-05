@@ -32,7 +32,7 @@ BaseState* FallState::commandHandler(GameObject* entity, commandType command){
 
 BaseState* FallState::observing(GameObject* entity){
     if (ARE_SAME(entity->getPhysicsComponent()->getCurrentVelocity().x, 0) && ARE_SAME(entity->getPhysicsComponent()->getCurrentVelocity().y, 0)) return &GameObjectStates::idleState;
-    
+ 
     if (!(ARE_SAME(entity->getPhysicsComponent()->getCurrentVelocity().x, 0)) && ARE_SAME(entity->getPhysicsComponent()->getCurrentVelocity().y, 0)) return &GameObjectStates::walkState;
     
     auto velocity = entity->getPhysicsComponent()->getCurrentVelocity();

@@ -23,23 +23,23 @@ OnScreenControllerLayer* OnScreenControllerLayer::create(const Size& screenSize)
 
 void OnScreenControllerLayer::addLeftSpace(){
     //left layer
-    leftSpace = Sprite::create();
-    leftSpace->setAnchorPoint(Vec2::ZERO);
-    leftSpace->setPosition(Vec2::ZERO);
-    leftSpace->setContentSize(Size(screenSize.width / 2, screenSize.height));
-    addChild(leftSpace);
+    leftSpace_ = Sprite::create();
+    leftSpace_->setAnchorPoint(Vec2::ZERO);
+    leftSpace_->setPosition(Vec2::ZERO);
+    leftSpace_->setContentSize(Size(screenSize_.width / 2, screenSize_.height));
+    addChild(leftSpace_);
     
     auto touch = EventListenerTouchOneByOne::create();
     touch->onTouchBegan = [&](Touch* touch, Event* event) -> bool{
         auto pos = touch->getLocation();
-        if (!leftSpace->getBoundingBox().containsPoint(pos))return false;
+        if (!leftSpace_->getBoundingBox().containsPoint(pos))return false;
         this->showStickLayer(pos);
         return true;
     };
     
     touch->onTouchMoved = [&](Touch* touch, Event* event) -> bool{
         
-        Vec2 orinPos = stickLayer->getPosition();
+        Vec2 orinPos = stickLayer_->getPosition();
         Vec2 currPos = touch->getLocation();
         Vec2 prePos = touch->getPreviousLocation();
         Vec2 CODiff = currPos - orinPos;
@@ -47,7 +47,7 @@ void OnScreenControllerLayer::addLeftSpace(){
         float radius = 50;
         float length = CODiff.length();
         
-        stick->setPosition(currPos);
+        stick_->setPosition(currPos);
         
         //move stick
         if (length >= radius){
@@ -56,10 +56,10 @@ void OnScreenControllerLayer::addLeftSpace(){
             Vec2 delta = CPDiff + PODiff;
             float radio = (delta.length() - radius) / delta.length();
             delta *= radio;
-            stickLayer->setPosition(stickLayer->getPosition() + delta);
+            stickLayer_->setPosition(stickLayer_->getPosition() + delta);
         }
         
-        auto stickRelativePos = stick->getPosition() - stickLayer->getPosition();
+        auto stickRelativePos = stick_->getPosition() - stickLayer_->getPosition();
         
         //right
         if (stickRelativePos.x > 30){if (controlComponent_)controlComponent_->onRight();}
@@ -76,18 +76,18 @@ void OnScreenControllerLayer::addLeftSpace(){
         return true;
     };
     
-    leftSpace->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touch, leftSpace);
+    leftSpace_->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touch, leftSpace_);
     
 }
 
 void OnScreenControllerLayer::addRightSpace(){
-    rightSpace = Sprite::create();
-    rightSpace->setAnchorPoint(Vec2::ZERO);
-    rightSpace->setPosition(Vec2(screenSize.width / 2, 0));
-    rightSpace->setContentSize(Size(screenSize.width / 2, screenSize.height));
+    rightSpace_ = Sprite::create();
+    rightSpace_->setAnchorPoint(Vec2::ZERO);
+    rightSpace_->setPosition(Vec2(screenSize_.width / 2, 0));
+    rightSpace_->setContentSize(Size(screenSize_.width / 2, screenSize_.height));
     
     auto touch = EventListenerTouchOneByOne::create();
-    addChild(rightSpace);
+    addChild(rightSpace_);
     
     
     touch->onTouchBegan = [&](Touch* touch, Event* event) -> bool{
@@ -96,64 +96,77 @@ void OnScreenControllerLayer::addRightSpace(){
         auto switch_ = getChildByName<Sprite*>("switch");
         
         auto pos = touch->getLocation();
-        if (!rightSpace->getBoundingBox().containsPoint(pos)) return false;
+        if (!rightSpace_->getBoundingBox().containsPoint(pos)) return false;
         //jump
         else if (jump->getBoundingBox().containsPoint(pos)){
             if(controlComponent_) controlComponent_->onJump();
         }
         //summon and recall
         else if (summonAndRecall->getBoundingBox().containsPoint(pos)){
-            if(controlComponent_ && !isSummoned){
-                isSummoned = controlComponent_->onSummon();
+            if(cooldown_ == false)startSwitchCoolDown();
+            else return true;
+            if(controlComponent_ && !isSummoned_){
+                isSummoned_ = controlComponent_->onSummon();
+                if (isSummoned_ == false) return true;
             }
             
-            else if (controlComponent_ && isSummoned) {
-                isSummoned = !controlComponent_->onRecall();
+            else if (controlComponent_ && isSummoned_) {
+                isSummoned_ = !controlComponent_->onRecall();
             }
             
-            switchSummonAndRecallButton();
+            
         }
         
         //switch
-        else if (hasSwitch && switch_->getBoundingBox().containsPoint(pos)){if(controlComponent_)
+        else if (hasSwitch_ && switch_->getBoundingBox().containsPoint(pos)){if(controlComponent_)
             controlComponent_->onSwitch();
         }
         return true;
     };
     
-    rightSpace->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touch, rightSpace);
+    rightSpace_->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touch, rightSpace_);
     
     
 }
 
 void OnScreenControllerLayer::showStickLayer(const Vec2& pos){
-    stickLayer->setVisible(true);
-    stick->setVisible(true);
-    stick->setPosition(pos);
-    stickLayer->setPosition(pos);
+    stickLayer_->setVisible(true);
+    stick_->setVisible(true);
+    stick_->setPosition(pos);
+    stickLayer_->setPosition(pos);
 }
 
 void OnScreenControllerLayer::hideStickLayer(){
-    stickLayer->setVisible(false);
-    stick->setVisible(false);
+    stickLayer_->setVisible(false);
+    stick_->setVisible(false);
 }
 
 void OnScreenControllerLayer::addRightController(){
     
 }
 
-OnScreenControllerLayer::OnScreenControllerLayer(const Size& screenSize) : screenSize(screenSize){
+void OnScreenControllerLayer::startSwitchCoolDown(){
+    cooldown_ = true;
+    CallFunc* callback = CallFunc::create([&](){
+        switchSummonAndRecallButton();
+        this->cooldown_ = false;
+    });
+    
+    this->runAction(Sequence::create(DelayTime::create(1), callback,NULL));
+}
+
+OnScreenControllerLayer::OnScreenControllerLayer(const Size& screenSize) : screenSize_(screenSize){
     
     addLeftSpace();
     addRightSpace();
     addRightController();
     
-    stickLayer = Sprite::create("res/UI/onScreenControl/stick_layer.png");
-    stickLayer->setScale(0.7);
-    stick = Sprite::create("res/UI/onScreenControl/stick.png");
-    stick->setScale(0.7);
-    stickLayer->setVisible(false);
-    stick->setVisible(false);
+    stickLayer_ = Sprite::create("res/UI/onScreenControl/stick_layer.png");
+    stickLayer_->setScale(0.7);
+    stick_ = Sprite::create("res/UI/onScreenControl/stick.png");
+    stick_->setScale(0.7);
+    stickLayer_->setVisible(false);
+    stick_->setVisible(false);
     
     //jumpButton
     auto jump = Sprite::create("res/UI/onScreenControl/jump.png");
@@ -177,19 +190,19 @@ OnScreenControllerLayer::OnScreenControllerLayer(const Size& screenSize) : scree
     addChild(switch_);
     addChild(jump);
     addChild(summonAndRecall);
-    addChild(stick);
-    addChild(stickLayer);
+    addChild(stick_);
+    addChild(stickLayer_);
 }
 
 void OnScreenControllerLayer::switchSummonAndRecallButton(){
     auto sr = getChildByName<Sprite*>("sr");
-    if (isSummoned){ // to recall
+    if (isSummoned_){ // to recall
         Texture2D *texture = Director::getInstance()->getTextureCache()->addImage("res/UI/onScreenControl/recall.png");
         auto size = texture->getContentSize();
         auto frame = SpriteFrame::createWithTexture(texture, Rect(0, 0, size.width, size.height));
         sr->setSpriteFrame(frame);
         
-        hasSwitch = true;
+        hasSwitch_ = true;
         auto switch_ = getChildByName<Sprite*>("switch");
         switch_->setVisible(true);
     }
@@ -199,7 +212,7 @@ void OnScreenControllerLayer::switchSummonAndRecallButton(){
         auto frame = SpriteFrame::createWithTexture(texture, Rect(0, 0, size.width, size.height));
         sr->setSpriteFrame(frame);
         
-        hasSwitch = false;
+        hasSwitch_ = false;
         auto switch_ = getChildByName<Sprite*>("switch");
         switch_->setVisible(false);
     }

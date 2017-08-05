@@ -11,6 +11,7 @@
 #include "IdleState.hpp"
 #include "GameScene.hpp"
 #include "SummonSystem.hpp"
+#include "GameInfo.hpp"
 SummonState::SummonState(std::string name) : BaseState(name){
     
 }
@@ -30,6 +31,7 @@ BaseState* SummonState::observing(GameObject* entity){
 void SummonState::enter(GameObject* entity, commandType type){
     BaseState::enter(entity, type);
     auto scene = static_cast<GameScene*>(entity->getParent());
+    entity->getPhysicsComponent()->setVelocity(b2Vec2_zero);
     if (entity->getName() == "bro")
         scene->getSummonSystem()->summon(sis);
     else

@@ -36,7 +36,7 @@ bool FirstScene::init(TMXTiledMap* map, const b2Vec2& gravity){
     //event test
     auto li = EventListenerTouchOneByOne::create();
     li->onTouchBegan = [&](Touch* touch, Event* event) -> bool{
-        GameScene::checkEvent("open_door");
+        GameScene::eventManager_->checkEvent("open_door");
         return true;
     };
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(li, this);
@@ -49,7 +49,7 @@ bool FirstScene::init(TMXTiledMap* map, const b2Vec2& gravity){
 }
 
 void FirstScene::registerEvent(){
-    GameScene::registerEvent("open_door", 4, CC_CALLBACK_0(FirstScene::openDoor, this));
+    GameScene::eventManager_->registerEvent("open_door", 4, CC_CALLBACK_0(FirstScene::openDoor, this));
 }
 
 
