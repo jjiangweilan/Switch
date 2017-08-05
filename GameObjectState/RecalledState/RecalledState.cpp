@@ -33,6 +33,7 @@ BaseState* RecalledState::observing(GameObject* entity) {
 
 void RecalledState::enter(GameObject* entity, commandType type){
     BaseState::enter(entity, type);
+    entity->getPhysicsComponent()->setVelocity(b2Vec2_zero);
 }
 
 void RecalledState::leave(GameObject*){

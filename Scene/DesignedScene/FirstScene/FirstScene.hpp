@@ -30,6 +30,7 @@ private:
      designed to separate event makeing up
      */
     void registerEvent();
+    
     /* event script */
     void openDoor(){
         log("open door");

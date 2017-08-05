@@ -25,6 +25,7 @@ BaseState* SummonedState::observing(GameObject* entity) {
 
 void SummonedState::enter(GameObject* entity, commandType type) {
     BaseState::enter(entity, type);
+    entity->getPhysicsComponent()->setVelocity(b2Vec2_zero);
 }
 void SummonedState::leave(GameObject*) {
     

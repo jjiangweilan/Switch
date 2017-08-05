@@ -74,7 +74,7 @@ private:
     
 };
 
-#define FLOAT_ACCURACY 0.00000001
+#define FLOAT_ACCURACY 0.001
 #define ARE_SAME(_x, _y) fabsf(_x - _y) < FLOAT_ACCURACY
 #define EMPTY_CATELOGUE      0b0
 #define HERO_CATELOGUE       0b1

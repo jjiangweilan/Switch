@@ -18,7 +18,7 @@ class SummonState;
 class RecalledState;
 class RecallState;
 class SummonedState;
-
+class SummonFailedState;
 class GameObjectStates {
 public:
     static IdleState idleState;
@@ -30,6 +30,7 @@ public:
     static SummonedState summonedState;
     static RecallState recallState;
     static RecalledState recalledState;
+    static SummonFailedState summonFailedState;
 };
 
 #endif /* GameObjectState_hpp */

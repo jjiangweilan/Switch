@@ -17,6 +17,7 @@
 #include "GameEvent.hpp"
 #include "UILayer.hpp"
 #include "Hero.hpp"
+#include "EventManager.hpp"
 class SummonSystem;
 USING_NS_CC;
 typedef std::vector<GameObject*> GameObject_v;
@@ -103,7 +104,7 @@ protected:
     GameObject_v gameObjects_;
     UILayer* uiLayer_;
     SummonSystem* summonSystem_;
-    
+    EventManager* eventManager_;
     bool init(TMXTiledMap* map, const b2Vec2& gravity);
     /**
      add a new event recorder to game event map
@@ -120,9 +121,10 @@ protected:
      @param std::string& the name of the evnet
      */
     void checkEvent(const std::string&);
+    
 private:
     TMXTiledMap* tiledMap_;
-    GameEvent_v gameEvent_v_;
+    
 };
 
 #endif /* GameScene_hpp */

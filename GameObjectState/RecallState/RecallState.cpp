@@ -24,6 +24,7 @@ BaseState* RecallState::observing(GameObject* entity) {
 
 void RecallState::enter(GameObject* entity, commandType type){
     BaseState::enter(entity, type);
+    entity->getPhysicsComponent()->setVelocity(b2Vec2_zero);
     auto scene = static_cast<GameScene*>(entity->getParent());
     auto recalledHero = entity->getName() == "bro" ? scene->getChildByName<Hero*>("sis") : scene->getChildByName<Hero*>("bro");
     

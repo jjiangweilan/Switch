@@ -9,12 +9,10 @@
 #include "GameScene.hpp"
 #include "Hero.hpp"
 #include "SummonSystem.hpp"
-GameScene::GameScene() : scenePhysics_(NULL), summonSystem_(NULL), gameObjects_(), gameEvent_v_(), tiledMap_(NULL){};
+GameScene::GameScene() : scenePhysics_(NULL), summonSystem_(NULL), gameObjects_(), eventManager_(new EventManager), tiledMap_(NULL){};
 GameScene::~GameScene(){
     if(scenePhysics_) delete scenePhysics_;
-    for (auto event : gameEvent_v_){
-        delete event.second;
-    }
+    if(eventManager_) delete eventManager_;
 };
 
 bool GameScene::init(TMXTiledMap* map, const b2Vec2& gravity){
@@ -118,14 +116,6 @@ b2Body* GameScene::createSisBody(Vec2 pos){
     sisBody->CreateFixture(&collisionArea);
     
     return sisBody;
-}
-
-void GameScene::registerEvent(const std::string & name, int count, std::function<void()> scrpit){
-    gameEvent_v_[name] = new GameEvent(count, scrpit);
-}
-
-void GameScene::checkEvent(const std::string & name){
-    gameEvent_v_[name]->checkOneMission();
 }
 
 void GameScene::hideHero(Hero* hero){

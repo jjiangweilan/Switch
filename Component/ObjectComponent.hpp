@@ -18,6 +18,4 @@ protected:
     GameObject* container_;
 };
 
-#define ARE_SAME(_x, _y) fabsf(_x - _y) < FLOAT_ACCURACY
-#define FLOAT_ACCURACY 0.00000001
 #endif /* Component_hpp */
