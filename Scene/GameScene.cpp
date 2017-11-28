@@ -8,6 +8,7 @@
 
 #include "GameScene.hpp"
 #include "Hero.hpp"
+
 #include "SummonSystem.hpp"
 GameScene::GameScene() : scenePhysics_(NULL), summonSystem_(NULL), gameObjects_(), eventManager_(new EventManager), tiledMap_(NULL){};
 GameScene::~GameScene(){
@@ -36,6 +37,12 @@ void GameScene::initUI(){
     auto bro = getChildByName<Hero*>("bro");
     uiLayer_->setControlCompoenet(bro->getControlComponent());
     addChild(uiLayer_);
+    
+    auto light = AmbientLight::create(Color3B(30, 30, 30));
+    light->setPosition(Vec2(30, 30));
+    light->setIntensity(100);
+    
+    addChild(light);
 }
 
 void GameScene::update(float delta){
@@ -114,6 +121,7 @@ b2Body* GameScene::createSisBody(Vec2 pos){
     
     auto sisBody = scenePhysics_->getWorld()->CreateBody(&BodyDef);
     sisBody->CreateFixture(&collisionArea);
+    
     
     return sisBody;
 }
