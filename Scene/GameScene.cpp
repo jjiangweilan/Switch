@@ -36,6 +36,13 @@ void GameScene::initUI(){
     auto bro = getChildByName<Hero*>("bro");
     uiLayer_->setControlCompoenet(bro->getControlComponent());
     addChild(uiLayer_);
+    
+    auto light = AmbientLight::create(Color3B(30, 30, 30));
+    light->setPosition(Vec2(30, 30));
+    light->setIntensity(100);
+    
+    addChild(light);
+
 }
 
 void GameScene::update(float delta){
